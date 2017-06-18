@@ -1,3 +1,4 @@
+/.kube
 /dump
 /target
 .classpath
