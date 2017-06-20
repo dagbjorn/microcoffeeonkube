@@ -21,35 +21,35 @@ Date | Change
 * [Other stuff](#other-stuff)
 
 ## <a name="acknowledgements"></a>Acknowledgements
-The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; microcoffee uses a microservice architecture, runs in Docker containers on Kubernetes and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
+The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; microcoffee uses a microservice architecture, runs in Docker containers on Kubernetes - the open source platform for management of containerized applications - and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
 
 ## <a name="application"></a>The application
 
 ### The microservices
-The application is made up by four microservices, each running in its own Docker container. Each microservice, apart from the database, is implemented by a Spring Boot application. Finally, the application is deployed on Kubernetes; each microservice is allocated a replication controller fronted by a service. For development purposes, each microservice may also be run as a "naked" pod. Endpoint configuration is based environment variables.
+The application is made up by four microservices, each running in its own Docker container. Each microservice, apart from the database, is implemented by a Spring Boot application. Finally, the application is deployed on Kubernetes where each microservice is allocated a replication controller fronted by a service. For development purposes, each microservice may also be run as a "naked" pod. Endpoint configuration is based on environment variables.
 
-The application supports both http and https on the frontend as well as between the frontend and the backend REST services. However, https is a requirement in Chrome and Opera to get the HTML Geolocation API going. Also, browsers are not particulary happy with mixed content (mix of http and https connections), so pure use of https is recommended.
+The application supports both http and https on the frontend consisting of a GUI and REST services facing the Internet. However, https is a requirement in Chrome and Opera to get the HTML Geolocation API going. Also, browsers are not particulary happy with mixed content (mix of http and https connections), so pure use of https is recommended.
 
 #### microcoffeeonkube-database
 Contains the MongoDB database. The database image is based on the [tutum/mongodb](https://hub.docker.com/r/tutum/mongodb/) image on DockerHub.
 
-The database installation uses a Docker volume, *mongodbdata*, for data storage. This volume needs to be created before starting the container.
+The database installation uses a persistent Kubernetes volume, *mongodbdata*, for data storage. This volume is automatically created by Kubernetes according to the configuration in the manifest file.
 
 :warning: The database runs without any security enabled.
 
 #### microcoffeeonkube-location
 Contains the Location REST service for locating the nearest coffee shop. Coffee shop geodata is downloaded from [OpenStreetMap](https://www.openstreetmap.org) and imported into the database.
 
-:bulb: The `microcoffee-database` project contains a geodata file, `oslo-coffee-shops.xml`, with all Oslo coffee shops currently registered on OpenStreetMap. See [Download geodata from OpenStreetMap](#download-geodata) for how this file is created.
+:bulb: The `microcoffeeonkube-database` project contains a geodata file, `oslo-coffee-shops.xml`, with all Oslo coffee shops currently registered on OpenStreetMap. See [Download geodata from OpenStreetMap](#download-geodata) for how this file is created.
 
 #### microcoffeeonkube-order
 Contains the Menu and Order REST services. Provides APIs for reading the coffee menu and placing coffee orders.
 
 #### microcoffeeonkube-gui
-Contains the application GUI written in AngularJS. Nothing fancy, but will load the coffee shop menu from which your favorite coffee may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
+Contains the application GUI written in AngularJS. Nothing fancy, but will load the coffee shop menu from which your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
 
 ### Common artifacts
-The application also contains some common artifacts (for the time being only one) which are used by more than one microservice. Each artifact is built by its own Maven project.
+The application also contains common artifacts (for the time being only one) which are used by more than one microservice. Each artifact is built by its own Maven project.
 
 A word of warning: Common artifacts should be used wisely in a microservice architecture.
 
@@ -57,14 +57,16 @@ A word of warning: Common artifacts should be used wisely in a microservice arch
 Creates a self-signed PKI certificate, contained in the Java keystore `microcoffee-keystore.jks`, needed by the application to run https. In fact, two certificates are created, one with the fixed common name (CN) `localhost` and one with a common name free of choice (default `192.168.99.100`).
 
 ### microcoffeeonkube-kubernetes
-Contains the Kubernetes manifest files (yaml) of the application. Each microservice is allocated to a replication controller fronted by a service.
+Contains the Kubernetes manifest files (yaml) of the application, one manifest file per microservice. For each microservice, a replication controller is created which is fronted by a service.
+
+Convenience batch files for easy deploy and undeploy of the application are also provided.
 
 ## <a name="prerequisite"></a>Prerequisite
 The microcoffee application is developed on Windows 10 and tested with Minikube 0.19.1 running on Oracle VM VirtualBox 5.1.22.
 
-For building and testing the application on a development machine, Minikube is a good option. Minikube runs a single-node Kubernetes cluster inside a VM on your development machine. In addition, kubectl - the Kubernetes CLI - must be installed together with Minikube.
+For building and testing the application on a development machine, Minikube is a good option. Minikube runs a single-node Kubernetes cluster inside a VM on your development machine. In addition, kubectl - the Kubernetes CLI - must be installed.
 
-Installation of Minikube and kubectl is easy, just download the two executables and place them in a folder on your Windows path. You may also want to define the two environment variables MINIKUBE\_HOME and KUBECONFIG to suitable folders if you don't like the default location in your user home directory. MINIKUBE\_HOME is where the VM is downloaded first time you start Minikube.
+Installation of Minikube and kubectl is straightforward, just download the two executables and place them in a folder on your Windows path. You may also want to define the two environment variables MINIKUBE\_HOME and KUBECONFIG to suitable folders if you don't like the default locations in your user home directory. MINIKUBE\_HOME is where the VM is downloaded first time you start Minikube. The size of this folder will grow over time. KUBECTL contains the kubectl config file.
 
 A separate Docker installation on your development machine is also useful, however strictly not necessary.
 
@@ -81,7 +83,7 @@ Next, configure the Docker environment variables in your shell following the ins
 
     minikube docker-env
 
-:bulb: On Windows its handy to create a batch file to do this, for instance called `minikube-setenv.bat`, and place it in a folder on your Windows path.
+:bulb: On Windows, it is handy to create a batch file to do this. The file should be placed in a folder on your Windows path. A sample batch file, `minikube-setenv.bat`, is located in the `utils` folder of `microcoffeeonkube-kubernetes`.
 
 To check the status of your local Kubernetes cluster, run:
 
@@ -118,9 +120,9 @@ To specify, a different common name and/or key alias, run:
 :bulb: The keystore properties are specified in `application.properties` of each microservice using the `microcoffeeonkube-certificates` artifact.
 
 ### Build the microservices
-Use Maven to build each microservice in turn. (Spring Boot applications only.)
+Use Maven to build each microservice in turn. (The Spring Boot applications only.)
 
-:exclamation: Just remember that Minikube must be running for successful building the Docker images.
+:exclamation: Just remember that Minikube must be running for building the Docker images successfully.
 
 In `microcoffeeonkube-location`, `microcoffeeonkube-order` and `microcoffeeonkube-gui`, run:
 
@@ -140,20 +142,20 @@ Environment-specific properties comprise:
 * REST service URLs.
 * Keystore properties.
 
-In particular, you need to pay attention to the IP address of the (virtual) Linux host. Default value used by the application is **192.168.99.100**. (Suits VirtualBox.)
+In particular, you need to pay attention to the IP address of the VM. Default value used by the application is **192.168.99.100**. (Suits VirtualBox.)
 
 The port numbers are:
 
-Microservice | http port | https port
-------- | ---------- | ----------
-microcoffeeonkube-gui | 8080 | 8443
-microcoffeeonkube-location | 8081 | 8444
-microcoffeeonkube-order | 8082 | 8445
-microcoffeeonkube-database | 27017 | n/a
+Microservice | http port | https port | Comment
+------- | ---------- | ---------- | ---------
+microcoffeeonkube-gui | 9080 | 9443 | Port 8443 is allocated by Kubernetes itself.
+microcoffeeonkube-location | 8081 | 8444 |
+microcoffeeonkube-order | 8082 | 8445 |
+microcoffeeonkube-database | 27017 | n/a |
 
 :warning: If you change any of the environment properties, you need to rebuild the actual Docker image.
 
-In a production environment, here that means when running microcoffee on Minikube, the database connection URL and REST service URLs are defined by environment variables. The table below defines the environment variables that must exist per microservice.
+In a production environment (here that means the application deployed to Minikube), the database connection URL and REST service URLs are defined by environment variables. The table below defines the environment variables that must be defined per microservice.
 
 Microservice | Environment variable | Defined by
 ------------ | -------------------- | ------------
@@ -167,7 +169,7 @@ microcoffeeonkube-location | MICROCOFFEE\_MONGODB\_SERVICE\_PORT | Kubernetes se
 microcoffeeonkube-order | MICROCOFFEE\_MONGODB\_SERVICE\_HOST | Kubernetes service (out of the box)
 microcoffeeonkube-order | MICROCOFFEE\_MONGODB\_SERVICE\_PORT | Kubernetes service (out of the box)
 
-Note that `env.js` is filtered by a special servlet (`EnvironmentFilterServlet`) in the gui microservice, replacing the environment variables used by the REST endpoint URLs by actual values.
+Note that `env.js` is filtered by a special servlet (`EnvironmentFilterServlet`) in the gui microservice, substituting the environment variables used by the REST endpoint URLs by actual values.
 
 ## <a name="setting-up-database"></a>Setting up the database
 
@@ -178,7 +180,7 @@ The manifest file `microcoffee-mongodb.yml` creates a Kubernetes volume of type 
 * mountPath (inside the container): `/data/db`
 * hostPath (on the VM): `/mnt/sda1/data/mongodbdata`
 
-The data stored in the volume survive restarts. This is because Minikube is configured to persist files stored in the `/data` directory (a softlink to `/mnt/sda1/data`).
+The data stored in the volume survive restarts. This is because Minikube by default is configured to persist files stored in `/data` (a softlink to `/mnt/sda1/data`).
 
 
 ### Load data into the database collections
@@ -186,7 +188,7 @@ The `microcoffeeonkube-database` project is used to load coffee shop locations, 
 
 But first we need to start MongoDB. From the `microcoffeeonkube-database` project, run:
 
-    start-k8s
+    deploy-k8s.bat
 
 This is a convenience batch file creating a pod containing the mongodb container. When the status of the pod is running, press Ctrl-C to terminate the batch file.
 
@@ -197,7 +199,7 @@ Then run:
 
 :warning: Just ignore the `java.security.AccessControlException` warnings that are thrown due to failed MBean registration.
 
-To verify the database loading, start the MongoDB client inside the *mongodb* container. (This command is also echoed by `start-k8s.bat`).
+To verify the database loading, start the MongoDB client inside the *mongodb* container. (This command is also echoed by `deploy-k8s.bat`).
 
     kubectl exec -it microcoffee -c mongodb -- mongo microcoffee
 
@@ -240,31 +242,31 @@ To verify the database loading, start the MongoDB client inside the *mongodb* co
     }
     >
 
-Finally, stop the mongodb pod by executing another convenience batch file in the project folder:
+Finally, delete the mongodb pod by executing another convenience batch file in the project folder:
 
-    stop-k8s
+    undeploy-k8s.bat
 
 ## <a name="run-microcoffee"></a>Run microcoffee
-From the `service` folder of `microcoffeeonkube-kubernetes`, start microcoffee using the following convenience batch file:
+From the `service` folder of `microcoffeeonkube-kubernetes`, deploy microcoffee on Kubernetes using the following convenience batch file:
 
-    start-all
+    deploy-k8s-all.bat
 
-The batch file creates the replication controller and service of each of the four microservices.
+The batch file creates the replication controller and service of each of the four microservices. (Run `undeploy-k8s-all.bat`to undeploy.)
 
 Each project contains its own `microcoffee-pod.yml` which will create a pod containing all downstream containers in addition to itself.
 
 For testing individual projects outside Kubernetes, run:
 
-    run-local
+    run-local.bat
 
-This is a batch file that creates the necessary environment variables needed by the microservice before running `mvn spring-boot:run`.
+This is a batch file that defines the necessary environment variables needed by the microservice before running `mvn spring-boot:run`.
 
 ## <a name="give-a-spin"></a>Give microcoffee a spin
 After microcoffee has started (it takes a while), navigate to the coffee shop to place your first coffee order:
 
-    https://192.168.99.100:8443/coffee.html
+    https://192.168.99.100:9443/coffee.html
 
-assuming the VM host IP 192.168.99.100 and https is in use.
+assuming the VM host IP 192.168.99.100 and that https is in use.
 
 :warning: Because of the self-signed certificate, a security-aware browser will complain a bit.
 * Chrome: Just click Advanced and hit the "Proceed to 192.168.99.100 (unsafe)" link.
