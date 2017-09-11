@@ -50,7 +50,7 @@ spec:
         - name: MICROCOFFEE_MONGODB_SERVICE_PORT
           value: "27017"
     - name: mongodb
-      image: tutum/mongodb:3.2
+      image: mongo:3.4.8
       ports:
         - containerPort: 27017
           hostPort: 27017
@@ -59,9 +59,6 @@ spec:
       volumeMounts:
         - name: mongodbdata
           mountPath: /data/db
-      env:
-        - name: AUTH
-          value: "no"
   volumes:
     - name: mongodbdata
       hostPath:

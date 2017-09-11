@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.7.RELEASE</version> <!-- For MongoDB 3.2 -->
+        <version>1.5.6.RELEASE</version>
     </parent>
 
     <properties>
@@ -80,6 +80,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <jvmArguments>
+                        -Djavax.net.debug=none
+                    </jvmArguments>
+                </configuration>
             </plugin>
 
             <plugin>

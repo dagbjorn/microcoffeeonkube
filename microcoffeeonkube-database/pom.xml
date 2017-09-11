@@ -9,8 +9,8 @@
     <packaging>pom</packaging>
 
     <properties>
-        <groovy.version>2.4.11</groovy.version>
-        <mongo-java-driver.version>3.2.2</mongo-java-driver.version>
+        <groovy.version>2.4.12</groovy.version>
+        <mongo-java-driver.version>3.4.3</mongo-java-driver.version>
     </properties>
 
     <build>
