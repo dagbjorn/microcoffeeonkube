@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <osm version="0.6" generator="osmfilter 1.2S">
-	<bounds minlat="59.8715" minlon="10.5606" maxlat="59.9767" maxlon="10.9338"/>
+	<bounds minlat="59.8703" minlon="10.5805" maxlat="59.9706" maxlon="10.9448"/>
 	<node id="292135703" lat="59.9234799" lon="10.7587531" version="9" timestamp="2016-04-15T13:54:08Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
@@ -49,7 +49,7 @@
 		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_vogtsgate_50/"/>
 		<tag k="wifi" v="no"/>
 	</node>
-	<node id="428063059" lat="59.920229" lon="10.6834023" version="3" timestamp="2016-04-15T13:54:08Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+	<node id="428063059" lat="59.920229" lon="10.6834023" version="4" timestamp="2017-04-19T07:45:04Z" changeset="47928150" uid="524500" user="wheelmap_android">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="22"/>
@@ -62,6 +62,7 @@
 		<tag k="operator" v="Kaffebrenneriet"/>
 		<tag k="phone" v="+47 22561324"/>
 		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_karenslyst_alle_22/"/>
+		<tag k="wheelchair" v="yes"/>
 	</node>
 	<node id="441565073" lat="59.9119793" lon="10.7403454" version="4" timestamp="2016-04-15T13:54:06Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
 		<tag k="addr:city" v="Oslo"/>
@@ -114,7 +115,7 @@
 		<tag k="name" v="Stockfleths"/>
 		<tag k="wheelchair" v="no"/>
 	</node>
-	<node id="521434665" lat="59.9198156" lon="10.6844701" version="4" timestamp="2016-04-15T13:54:01Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+	<node id="521434665" lat="59.9198156" lon="10.6844701" version="6" timestamp="2017-04-09T22:31:49Z" changeset="47605473" uid="524500" user="wheelmap_android">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="16"/>
@@ -130,7 +131,9 @@
 		<tag k="phone" v="+47 22551493"/>
 		<tag k="shop" v="bakery"/>
 		<tag k="smoking" v="no"/>
+		<tag k="toilets:wheelchair" v="no"/>
 		<tag k="website" v="http://www.bakerhansen.no/sjolyst/"/>
+		<tag k="wheelchair" v="yes"/>
 	</node>
 	<node id="571676204" lat="59.9163298" lon="10.7160046" version="5" timestamp="2016-04-15T13:54:07Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
 		<tag k="addr:city" v="Oslo"/>
@@ -250,10 +253,13 @@
 		<tag k="cuisine" v="coffee_shop"/>
 		<tag k="name" v="Fuglen"/>
 	</node>
-	<node id="1832533880" lat="59.9307015" lon="10.7934199" version="1" timestamp="2012-07-20T21:22:19Z" changeset="12392566" uid="1179" user="divid">
+	<node id="1832533880" lat="59.9307203" lon="10.7934818" version="5" timestamp="2017-08-21T17:56:32Z" changeset="51314009" uid="538387" user="forteller">
 		<tag k="amenity" v="cafe"/>
 		<tag k="cuisine" v="coffee_shop"/>
-		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="name" v="Norð Løren"/>
+		<tag k="opening_hours" v="Mo-Fr 07:00-18:00, Sa,Su 09:00-18:00"/>
+		<tag k="toilets:wheelchair" v="yes"/>
+		<tag k="wheelchair" v="yes"/>
 		<tag k="wifi" v="yes"/>
 	</node>
 	<node id="1883613666" lat="59.9273886" lon="10.731555" version="3" timestamp="2016-04-15T13:54:09Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
@@ -340,7 +346,7 @@
 		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_fjordalleen_7/"/>
 		<tag k="wheelchair" v="yes"/>
 	</node>
-	<node id="1883730293" lat="59.9140686" lon="10.7324477" version="3" timestamp="2016-04-15T13:54:07Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+	<node id="1883730293" lat="59.9140686" lon="10.7324477" version="4" timestamp="2017-02-10T12:49:25Z" changeset="45972803" uid="524500" user="wheelmap_android">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="28"/>
@@ -352,6 +358,7 @@
 		<tag k="opening_hours" v="Mo-Fr 07:00-21:30; Sa 09:30-21:30; Su 10:30-21:30"/>
 		<tag k="operator" v="Kaffebrenneriet"/>
 		<tag k="phone" v="+47 23697797"/>
+		<tag k="toilets:wheelchair" v="no"/>
 		<tag k="website" v="http://www.kaffebrenneriet.no/butikkene/butikkside/kaffebrenneriet_saga_kino/"/>
 		<tag k="wheelchair" v="yes"/>
 	</node>
@@ -467,21 +474,6 @@
 		<tag k="operator" v="Espresso House"/>
 		<tag k="phone" v="+47 21064805"/>
 		<tag k="website" v="http://www.espressohouse.com"/>
-	</node>
-	<node id="1886526464" lat="59.9142186" lon="10.7425886" version="3" timestamp="2016-09-22T08:40:37Z" changeset="42341787" uid="809733" user="Vesihiisi">
-		<tag k="addr:country" v="NO"/>
-		<tag k="addr:housenumber" v="17"/>
-		<tag k="addr:postcode" v="0159"/>
-		<tag k="addr:street" v="Grensen"/>
-		<tag k="amenity" v="cafe"/>
-		<tag k="cuisine" v="coffee_shop"/>
-		<tag k="email" v="grensen@bakerhansen.no"/>
-		<tag k="name" v="Baker Hansen"/>
-		<tag k="opening_hours" v="Mo-Fr 07:00-17:30; Sa 10:00-16:30"/>
-		<tag k="operator" v="Baker Hansen"/>
-		<tag k="phone" v="+47 22427883"/>
-		<tag k="shop" v="bakery"/>
-		<tag k="website" v="http://www.bakerhansen.no/grensen/"/>
 	</node>
 	<node id="1886537682" lat="59.9115736" lon="10.7356626" version="2" timestamp="2016-04-15T13:54:00Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
 		<tag k="addr:city" v="Oslo"/>
@@ -669,7 +661,7 @@
 		<tag k="smoking" v="no"/>
 		<tag k="website" v="http://www.bakerhansen.no/skillebekk/"/>
 	</node>
-	<node id="1915830429" lat="59.9241684" lon="10.7395604" version="3" timestamp="2016-04-15T13:54:02Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+	<node id="1915830429" lat="59.924174" lon="10.7395685" version="4" timestamp="2017-07-08T18:29:03Z" changeset="50137091" uid="5198133" user="Wulfmorn">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="45"/>
@@ -752,7 +744,7 @@
 		<tag k="phone" v="+47 21447630"/>
 		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-pilestredet.aspx"/>
 	</node>
-	<node id="1935110001" lat="59.9146927" lon="10.7195168" version="1" timestamp="2012-09-27T11:35:05Z" changeset="13270768" uid="7538" user="oyvind">
+	<node id="1935110001" lat="59.9146927" lon="10.7195168" version="3" timestamp="2017-06-21T09:15:27Z" changeset="49714901" uid="597290" user="monoschalter">
 		<tag k="addr:housenumber" v="90"/>
 		<tag k="addr:postcode" v="0255"/>
 		<tag k="addr:street" v="Henrik Ibsens gate"/>
@@ -762,7 +754,19 @@
 		<tag k="opening_hours" v="Mo-Fr 06:30-21:00; Sa-Su 09:00-18:00"/>
 		<tag k="operator" v="Wayne&#39;s Coffee"/>
 		<tag k="phone" v="+47 21666763"/>
+		<tag k="toilets:wheelchair" v="no"/>
 		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-solli-plass.aspx"/>
+		<tag k="wheelchair" v="yes"/>
+	</node>
+	<node id="1944590110" lat="59.9290339" lon="10.7173576" version="2" timestamp="2017-02-04T15:43:12Z" changeset="45808448" uid="3497659" user="NKA">
+		<tag k="addr:city" v="Oslo"/>
+		<tag k="addr:country" v="NO"/>
+		<tag k="addr:housenumber" v="9"/>
+		<tag k="addr:postcode" v="0366"/>
+		<tag k="addr:street" v="Valkyriegata"/>
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Espresso House"/>
 	</node>
 	<node id="1948285104" lat="59.9142278" lon="10.7297983" version="2" timestamp="2012-10-06T00:26:15Z" changeset="13379304" uid="7538" user="oyvind">
 		<tag k="addr:city" v="Oslo"/>
@@ -778,7 +782,7 @@
 		<tag k="phone" v="+47 21668146"/>
 		<tag k="website" v="http://vikaterrassen.no/butikkoversikt/wayne%C2%B4s-coffee"/>
 	</node>
-	<node id="1960942706" lat="59.9082645" lon="10.7231808" version="2" timestamp="2012-10-12T16:57:25Z" changeset="13469317" uid="7538" user="oyvind">
+	<node id="1960942706" lat="59.9082645" lon="10.7231808" version="4" timestamp="2017-03-27T07:04:56Z" changeset="47192476" uid="290680" user="wheelmap_visitor">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="4"/>
@@ -789,9 +793,11 @@
 		<tag k="name" v="Wayne&#39;s Coffee"/>
 		<tag k="opening_hours" v="Mo-Fr 07:30-20:00; Sa-Su 09:00-18:00"/>
 		<tag k="phone" v="+47 21668266"/>
+		<tag k="toilets:wheelchair" v="yes"/>
 		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-tjuvholmen.aspx"/>
+		<tag k="wheelchair" v="limited"/>
 	</node>
-	<node id="1975696959" lat="59.9143062" lon="10.7361771" version="3" timestamp="2015-09-03T20:57:43Z" changeset="33782336" uid="524500" user="wheelmap_android">
+	<node id="1975696959" lat="59.914274" lon="10.7362783" version="4" timestamp="2017-02-24T21:42:03Z" changeset="46380779" uid="605010" user="Noen">
 		<tag k="addr:housenumber" v="24"/>
 		<tag k="addr:postcode" v="0162"/>
 		<tag k="addr:street" v="Karl Johans gate"/>
@@ -824,7 +830,7 @@
 		<tag k="operator" v="Wayne&#39;s Coffee"/>
 		<tag k="website" v="http://www.waynescoffee.no/"/>
 	</node>
-	<node id="1999466123" lat="59.9133233" lon="10.74145" version="2" timestamp="2012-11-05T23:55:09Z" changeset="13767685" uid="7538" user="oyvind">
+	<node id="1999466123" lat="59.9133233" lon="10.74145" version="3" timestamp="2017-03-27T07:03:38Z" changeset="47192476" uid="290680" user="wheelmap_visitor">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="35"/>
@@ -837,6 +843,7 @@
 		<tag k="operator" v="Wayne&#39;s Coffee"/>
 		<tag k="phone" v="+47 21445190"/>
 		<tag k="website" v="http://www.waynescoffee.no/kafeer/oslo/kafe-egertorget.aspx"/>
+		<tag k="wheelchair" v="limited"/>
 	</node>
 	<node id="2004612610" lat="59.9507635" lon="10.6942671" version="5" timestamp="2014-08-28T21:57:58Z" changeset="25084381" uid="145231" user="woodpeck_repair">
 		<tag k="addr:city" v="Oslo"/>
@@ -861,7 +868,7 @@
 		<tag k="name" v="Mocca kaffebar &#38; brenneri AS"/>
 		<tag k="phone" v="22 55 55 18"/>
 	</node>
-	<node id="2276017071" lat="59.9072696" lon="10.7210089" version="4" timestamp="2014-08-28T21:57:59Z" changeset="25084381" uid="145231" user="woodpeck_repair">
+	<node id="2276017071" lat="59.9072696" lon="10.7210089" version="6" timestamp="2017-05-20T07:36:26Z" changeset="48837435" uid="290680" user="wheelmap_visitor">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="15"/>
@@ -873,7 +880,9 @@
 		<tag k="opening_hours" v="Mo-We 07:00-18:00; Th 07:00-19:00; Fr 07:00-21:00; Sa-Su 10:00-18:00"/>
 		<tag k="phone" v="+47 37040446"/>
 		<tag k="shop" v="bakery"/>
+		<tag k="toilets:wheelchair" v="yes"/>
 		<tag k="website" v="http://www.bergshaven.com/"/>
+		<tag k="wheelchair" v="yes"/>
 	</node>
 	<node id="2278256452" lat="59.9374779" lon="10.7517188" version="3" timestamp="2015-04-19T19:23:19Z" changeset="30339518" uid="596206" user="Simen Heggestøyl">
 		<tag k="addr:street" v="Stockflethsgate 60"/>
@@ -892,13 +901,13 @@
 		<tag k="name" v="Evita Espressobar Sørenga"/>
 		<tag k="wifi" v="free"/>
 	</node>
-	<node id="2616073833" lat="59.9181441" lon="10.7436842" version="3" timestamp="2016-09-22T08:41:21Z" changeset="42341787" uid="809733" user="Vesihiisi">
+	<node id="2616073833" lat="59.9181441" lon="10.7436842" version="4" timestamp="2017-07-01T10:22:44Z" changeset="49961850" uid="173918" user="njaard">
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="1"/>
 		<tag k="addr:street" v="Ullevålsveien"/>
 		<tag k="amenity" v="cafe"/>
 		<tag k="cuisine" v="coffee_shop"/>
-		<tag k="name" v="Miss bean café"/>
+		<tag k="name" v="Dagny&#39;s"/>
 	</node>
 	<node id="2617758178" lat="59.9236703" lon="10.7407014" version="2" timestamp="2014-01-10T19:20:28Z" changeset="19923188" uid="169710" user="ehamberg">
 		<tag k="amenity" v="cafe"/>
@@ -923,7 +932,7 @@
 		<tag k="name" v="Baker Hansen"/>
 		<tag k="shop" v="bakery"/>
 	</node>
-	<node id="2725126143" lat="59.9142504" lon="10.7519654" version="2" timestamp="2016-09-22T08:41:30Z" changeset="42341787" uid="809733" user="Vesihiisi">
+	<node id="2725126143" lat="59.9142433" lon="10.7519512" version="3" timestamp="2017-03-19T16:00:58Z" changeset="46986320" uid="5198133" user="Wulfmorn">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="2"/>
@@ -943,10 +952,10 @@
 		<tag k="toilets:wheelchair" v="yes"/>
 		<tag k="wheelchair" v="yes"/>
 	</node>
-	<node id="2919371563" lat="59.9221345" lon="10.7570683" version="2" timestamp="2016-04-15T13:59:05Z" changeset="38588485" uid="1965308" user="FredrikLindseth">
+	<node id="2919371563" lat="59.9221345" lon="10.7570683" version="3" timestamp="2017-07-31T08:28:05Z" changeset="50712184" uid="473" user="Håkon">
 		<tag k="amenity" v="cafe"/>
 		<tag k="cuisine" v="coffee_shop"/>
-		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="name" v="Retrolykke"/>
 	</node>
 	<node id="3040987689" lat="59.930802" lon="10.7575615" version="2" timestamp="2015-12-02T10:16:10Z" changeset="35702733" uid="825406" user="IngunnW">
 		<tag k="amenity" v="cafe"/>
@@ -961,7 +970,7 @@
 	<node id="3041284439" lat="59.9310245" lon="10.7571467" version="2" timestamp="2014-08-26T07:10:47Z" changeset="25020185" uid="128123" user="lars"/>
 	<node id="3041284440" lat="59.9311788" lon="10.7573046" version="1" timestamp="2014-08-25T13:18:44Z" changeset="25003411" uid="128123" user="lars"/>
 	<node id="3041284441" lat="59.9311845" lon="10.7572232" version="1" timestamp="2014-08-25T13:18:44Z" changeset="25003411" uid="128123" user="lars"/>
-	<node id="3090736998" lat="59.9136313" lon="10.7412136" version="2" timestamp="2015-09-13T17:52:52Z" changeset="34004821" uid="53964" user="Mathieu Marquer">
+	<node id="3090736998" lat="59.9136313" lon="10.7412136" version="2" timestamp="2015-09-13T17:52:52Z" changeset="34004821" uid="53964" user="_Mathieu_">
 		<tag k="amenity" v="cafe"/>
 		<tag k="cuisine" v="coffee_shop"/>
 		<tag k="name" v="Baker Hansen"/>
@@ -972,10 +981,10 @@
 		<tag k="internet_access" v="wlan"/>
 		<tag k="name" v="Espresso House"/>
 	</node>
-	<node id="3132098801" lat="59.9114349" lon="10.7524058" version="3" timestamp="2016-04-15T13:54:09Z" changeset="38588342" uid="1965308" user="FredrikLindseth">
+	<node id="3132098801" lat="59.9112807" lon="10.7529968" version="4" timestamp="2017-08-16T15:24:21Z" changeset="51178767" uid="5732597" user="Entur AS | Johan Wiklund">
 		<tag k="amenity" v="cafe"/>
 		<tag k="cuisine" v="coffee_shop"/>
-		<tag k="level" v="2"/>
+		<tag k="level" v="3"/>
 		<tag k="name" v="Starbucks Coffee"/>
 	</node>
 	<node id="3266303481" lat="59.9533437" lon="10.7244834" version="2" timestamp="2015-01-03T04:28:25Z" changeset="27878568" uid="1818564" user="ErikBol"/>
@@ -991,10 +1000,12 @@
 		<tag k="name" v="Godt Brød"/>
 		<tag k="opening_hours" v="06:00-18:00"/>
 	</node>
-	<node id="3441434847" lat="59.9105983" lon="10.7286756" version="1" timestamp="2015-04-06T17:54:25Z" changeset="30022134" uid="2178612" user="HelgeO">
+	<node id="3441434847" lat="59.9105983" lon="10.7286756" version="3" timestamp="2017-04-19T07:48:53Z" changeset="47928150" uid="524500" user="wheelmap_android">
 		<tag k="amenity" v="cafe"/>
 		<tag k="cuisine" v="coffee_shop"/>
 		<tag k="name" v="Espresso House"/>
+		<tag k="toilets:wheelchair" v="yes"/>
+		<tag k="wheelchair" v="yes"/>
 	</node>
 	<node id="3441434871" lat="59.9133781" lon="10.7321373" version="1" timestamp="2015-04-06T17:54:26Z" changeset="30022134" uid="2178612" user="HelgeO">
 		<tag k="amenity" v="cafe"/>
@@ -1012,7 +1023,7 @@
 		<tag k="opening_hours" v="Mo-Fr 07:00-21:00;Sa-Su 09:00-20:00"/>
 		<tag k="website" v="http://coffeeshopcompany.no/"/>
 	</node>
-	<node id="3514876864" lat="59.9282618" lon="10.7169236" version="1" timestamp="2015-05-13T14:16:39Z" changeset="31105058" uid="2178612" user="HelgeO">
+	<node id="3514876864" lat="59.9282618" lon="10.7169236" version="3" timestamp="2017-04-19T08:05:06Z" changeset="47928150" uid="524500" user="wheelmap_android">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:country" v="NO"/>
 		<tag k="addr:housenumber" v="60"/>
@@ -1021,6 +1032,8 @@
 		<tag k="amenity" v="cafe"/>
 		<tag k="cuisine" v="coffee_shop"/>
 		<tag k="name" v="Starbucks"/>
+		<tag k="toilets:wheelchair" v="yes"/>
+		<tag k="wheelchair" v="yes"/>
 	</node>
 	<node id="3544034628" lat="59.9085201" lon="10.7682179" version="2" timestamp="2016-09-22T08:41:28Z" changeset="42341787" uid="809733" user="Vesihiisi">
 		<tag k="addr:city" v="Oslo"/>
@@ -1093,14 +1106,14 @@
 		<tag k="opening_hours" v="Mo-Fr 06:30-17:00; Sa-Su 11:00-16:00"/>
 		<tag k="smoking" v="no"/>
 	</node>
-	<node id="4147050283" lat="59.9024541" lon="10.6282513" version="1" timestamp="2016-04-25T15:40:55Z" changeset="38860007" uid="501707" user="Reitstoen">
+	<node id="4147050283" lat="59.9024541" lon="10.6282513" version="3" timestamp="2017-03-20T13:55:27Z" changeset="47005290" uid="290680" user="wheelmap_visitor">
 		<tag k="amenity" v="cafe"/>
 		<tag k="cuisine" v="coffee_shop"/>
-		<tag k="name" v="Wayne&#39;s Coffee"/>
+		<tag k="name" v="Rast Coffee &#38; Tea"/>
 		<tag k="opening_hours" v="Mo-Fr 08:00-17:00; Sa-Su 11:00-17:00"/>
-		<tag k="website" v="http://www.waynescoffee.no/kafeer/fornebu/kafe-expo.aspx"/>
+		<tag k="wheelchair" v="yes"/>
 	</node>
-	<node id="4313863188" lat="59.9207605" lon="10.6827824" version="1" timestamp="2016-07-21T05:29:17Z" changeset="40911679" uid="708404" user="strandman">
+	<node id="4313863188" lat="59.9207605" lon="10.6827824" version="2" timestamp="2017-04-09T22:32:12Z" changeset="47605473" uid="524500" user="wheelmap_android">
 		<tag k="addr:city" v="Oslo"/>
 		<tag k="addr:housenumber" v="11"/>
 		<tag k="addr:postcode" v="0278"/>
@@ -1111,7 +1124,13 @@
 		<tag k="opening_hours" v="Mo-Fr 07:00-19:00; Sa-Su 09:00-19:00"/>
 		<tag k="outdoor_seating" v="yes"/>
 		<tag k="website" v="https://www.starbucks.no"/>
+		<tag k="wheelchair" v="yes"/>
 		<tag k="wifi" v="yes"/>
+	</node>
+	<node id="5071686908" lat="59.9125548" lon="10.7628251" version="1" timestamp="2017-08-31T14:41:54Z" changeset="51617899" uid="2178612" user="HelgeO">
+		<tag k="amenity" v="cafe"/>
+		<tag k="cuisine" v="coffee_shop"/>
+		<tag k="name" v="Starbucks"/>
 	</node>
 	<way id="300027546" version="3" timestamp="2015-12-02T10:16:21Z" changeset="35702733" uid="825406" user="IngunnW">
 		<nd ref="3041284438"/>

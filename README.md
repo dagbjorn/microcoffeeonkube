@@ -31,7 +31,7 @@ The application is made up by four microservices, each running in its own Docker
 The application supports both http and https on the frontend consisting of a GUI and REST services facing the Internet. However, https is a requirement in Chrome and Opera to get the HTML Geolocation API going. Also, browsers are not particulary happy with mixed content (mix of http and https connections), so pure use of https is recommended.
 
 #### microcoffeeonkube-database
-Contains the MongoDB database. The database image is based on the [tutum/mongodb](https://hub.docker.com/r/tutum/mongodb/) image on DockerHub.
+Contains the MongoDB database. The database image is based on the official [mongo](https://hub.docker.com/r/_/mongo/) image on DockerHub.
 
 The database installation uses a persistent Kubernetes volume, *mongodbdata*, for data storage. This volume is automatically created by Kubernetes according to the configuration in the manifest file.
 
@@ -62,7 +62,7 @@ Contains the Kubernetes manifest files (yaml) of the application, one manifest f
 Convenience batch files for easy deploy and undeploy of the application are also provided.
 
 ## <a name="prerequisite"></a>Prerequisite
-The microcoffee application is developed on Windows 10 and tested with Minikube 0.19.1 running on Oracle VM VirtualBox 5.1.22.
+The microcoffee application is developed on Windows 10 and tested with Minikube 0.21.0 running on Oracle VM VirtualBox 5.1.26.
 
 For building and testing the application on a development machine, Minikube is a good option. Minikube runs a single-node Kubernetes cluster inside a VM on your development machine. In addition, kubectl - the Kubernetes CLI - must be installed.
 
@@ -253,7 +253,7 @@ From the `service` folder of `microcoffeeonkube-kubernetes`, deploy microcoffee 
 
 The batch file creates the replication controller and service of each of the four microservices. (Run `undeploy-k8s-all.bat`to undeploy.)
 
-Each project contains its own `microcoffee-pod.yml` which will create a pod containing all downstream containers in addition to itself.
+In addition, each project contains its own `microcoffee-pod.yml` which will create a pod containing all downstream containers in addition to itself. Run the project-local `deploy-k8s.bat` file to deploy this pod-only version of the application to Kubernetes.
 
 For testing individual projects outside Kubernetes, run:
 
