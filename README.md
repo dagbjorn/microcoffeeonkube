@@ -5,6 +5,7 @@
 Date | Change
 ---- | -------
 20.06.2017 | Created.
+12.09.2017 | Migrated to official MongoDB image.
 
 ## Contents
 
