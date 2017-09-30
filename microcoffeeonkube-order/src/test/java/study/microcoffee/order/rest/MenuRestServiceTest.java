@@ -39,9 +39,7 @@ public class MenuRestServiceTest {
 
         given(menuRepositoryMock.getCoffeeMenu()).willReturn(expectedMenu);
 
-        mockMvc
-            .perform(get(SERVICE_PATH) //
-                .accept(MediaType.APPLICATION_JSON_UTF8)) //
+        mockMvc.perform(get(SERVICE_PATH).accept(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isOk()) //
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(content().json(expectedMenu));

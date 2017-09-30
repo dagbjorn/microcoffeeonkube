@@ -70,7 +70,6 @@ public class DrinkType {
 
     @Override
     public String toString() {
-        return String.format("DrinkType [name=%s, family=%s]", //
-            name, family);
+        return String.format("DrinkType [name=%s, family=%s]", name, family);
     }
 }
