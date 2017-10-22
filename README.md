@@ -6,6 +6,7 @@ Date | Change
 ---- | -------
 20.06.2017 | Created.
 12.09.2017 | Migrated to official MongoDB image.
+22.10.2017 | TODO Markdown file. New stuff checked in: New creditrating microservice (project: microcoffeeonkube-creditrating) for checking if customers are creditworthy. Used by the order microservice before an order is accepted. Added support for docker-compose due to flaky Minikube causing loads of connection refused.
 
 ## Contents
 

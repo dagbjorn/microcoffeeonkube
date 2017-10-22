@@ -17,6 +17,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mongodb.MongoClient;
 
+/**
+ * Integration tests of {@link MongoLocationRepository}.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("/application-test.properties")

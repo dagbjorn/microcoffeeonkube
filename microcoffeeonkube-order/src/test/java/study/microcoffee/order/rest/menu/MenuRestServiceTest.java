@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest;
+package study.microcoffee.order.rest.menu;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -18,8 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import study.microcoffee.order.repository.MenuRepository;
-import study.microcoffee.order.rest.MenuRestService;
+import study.microcoffee.order.rest.menu.MenuRestService;
 
+/**
+ * Unit tests of {@link MenuRestService}.
+ */
 @RunWith(SpringRunner.class)
 @WebMvcTest
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })

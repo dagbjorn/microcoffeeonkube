@@ -1,0 +1,22 @@
+version: '3'
+services:
+    location:
+        image: microcoffeeonkube-location:1.0.0-SNAPSHOT
+        ports:
+            - "8081:8081"
+            - "8444:8444"
+        links:
+            - mongodb
+        environment:
+            - MICROCOFFEE_MONGODB_SERVICE_HOST=192.168.99.100
+            - MICROCOFFEE_MONGODB_SERVICE_PORT=27017
+    mongodb:
+        image: mongo:3.4.8
+        ports:
+            - "27017:27017"
+            - "28017:28017"
+        volumes:
+            - mongodbdata:/data/db
+volumes:
+    mongodbdata:
+        external: true

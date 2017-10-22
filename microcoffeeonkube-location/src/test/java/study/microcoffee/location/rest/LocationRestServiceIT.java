@@ -26,6 +26,9 @@ import com.mongodb.MongoClient;
 
 import study.microcoffee.location.repository.MongoLocationRepository;
 
+/**
+ * Integration tests of {@link LocationRestService}.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")

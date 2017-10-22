@@ -56,7 +56,7 @@ public class LocationRestService {
     public Object getNearestCoffeeShop(@PathVariable("latitude") double latitude, @PathVariable("longitude") double longitude,
         @PathVariable("maxdistance") long maxDistance) {
 
-        logger.debug("REST service called: /nearest/{}/{}/{}", latitude, longitude, maxDistance);
+        logger.debug("GET /nearest/{}/{}/{}", latitude, longitude, maxDistance);
 
         Object coffeeShop = locationRepository.findNearestCoffeeShop(latitude, longitude, maxDistance);
         if (coffeeShop == null) {

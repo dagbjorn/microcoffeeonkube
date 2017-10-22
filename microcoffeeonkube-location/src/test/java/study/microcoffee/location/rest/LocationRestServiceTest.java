@@ -25,6 +25,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import study.microcoffee.location.repository.LocationRepository;
 import study.microcoffee.location.rest.LocationRestService;
 
+/**
+ * Unit tests of {@link LocationRestService}.
+ */
 @RunWith(SpringRunner.class)
 @WebMvcTest
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })

@@ -1,7 +1,8 @@
-package study.microcoffee.order.rest;
+package study.microcoffee.order.rest.order;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,11 +27,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
 import study.microcoffee.order.repository.OrderRepository;
-import study.microcoffee.order.rest.OrderRestService;
+import study.microcoffee.order.rest.order.OrderRestService;
 
+/**
+ * Unit tests of {@link OrderRestService}.
+ */
 @RunWith(SpringRunner.class)
 @WebMvcTest
 @TestPropertySource(properties = { "logging.level.study.microcoffee=DEBUG" })
@@ -43,6 +48,9 @@ public class OrderRestServiceTest {
 
     @MockBean
     private OrderRepository orderRepositoryMock;
+
+    @MockBean
+    private CreditRatingConsumer creditRatingCustomerMock;
 
     @Autowired
     private MockMvc mockMvc;
@@ -67,18 +75,35 @@ public class OrderRestServiceTest {
             .build();
 
         given(orderRepositoryMock.save(any(Order.class))).willReturn(savedOrder);
+        given(creditRatingCustomerMock.getCreateRating(anyString())).willReturn(70);
 
-        mockMvc
-            .perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
-                .header(HttpHeaders.ORIGIN, accessControlAllowOrigin) //
-                .content(toJson(newOrder)) //
-                .contentType(MediaType.APPLICATION_JSON_UTF8)) //
+        mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .header(HttpHeaders.ORIGIN, accessControlAllowOrigin) //
+            .content(toJson(newOrder)) //
+            .contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isCreated()) //
             .andExpect(header().string(HttpHeaders.LOCATION, Matchers.endsWith(savedOrder.getId())))
             .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, Matchers.equalTo(accessControlAllowOrigin))) //
             .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, Matchers.equalTo(accessControlExposeHeaders))) //
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(content().json(toJson(savedOrder)));
+    }
+
+    @Test
+    public void saveOrderWhenCreditRatingIsBadShouldReturnPaymentCreated() throws Exception {
+        Order newOrder = new Order.Builder() //
+            .type(new DrinkType("Latte", "Coffee")) //
+            .size("Small") //
+            .drinker("Poor Sod") //
+            .selectedOption("skimmed milk") //
+            .build();
+
+        given(creditRatingCustomerMock.getCreateRating(anyString())).willReturn(20);
+
+        mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
+            .content(toJson(newOrder)) //
+            .contentType(MediaType.APPLICATION_JSON_UTF8)) //
+            .andExpect(status().isPaymentRequired());
     }
 
     @Test
@@ -93,9 +118,8 @@ public class OrderRestServiceTest {
 
         given(orderRepositoryMock.findById(eq(expectedOrder.getId()))).willReturn(expectedOrder);
 
-        mockMvc
-            .perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, expectedOrder.getId()) //
-                .accept(MediaType.APPLICATION_JSON_UTF8)) //
+        mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, expectedOrder.getId()) //
+            .accept(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isOk()) //
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(content().json(toJson(expectedOrder)));
@@ -107,9 +131,8 @@ public class OrderRestServiceTest {
 
         given(orderRepositoryMock.findById(eq(orderId))).willReturn(null);
 
-        mockMvc
-            .perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
-                .accept(MediaType.APPLICATION_JSON_UTF8)) //
+        mockMvc.perform(get(GET_SERVICE_PATH, COFFEE_SHOP_ID, orderId) //
+            .accept(MediaType.APPLICATION_JSON_UTF8)) //
             .andExpect(status().isNoContent());
     }
 
@@ -118,7 +141,7 @@ public class OrderRestServiceTest {
     }
 
     @Configuration
-    @Import(OrderRestService.class)
+    @Import({ OrderRestService.class })
     static class Config {
     }
 }

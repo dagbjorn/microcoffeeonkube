@@ -4,8 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-import study.microcoffee.order.domain.DrinkType;
-
+/**
+ * Unit tests of {@link DrinkType}.
+ */
 public class DrinkTypeTest {
 
     @Test

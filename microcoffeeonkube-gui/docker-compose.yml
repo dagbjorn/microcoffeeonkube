@@ -1,0 +1,54 @@
+version: '3'
+services:
+    gui:
+        image: microcoffeeonkube-gui:1.0.0-SNAPSHOT
+        ports:
+            - "8080:8080"
+            - "8443:8443"
+        links:
+            - location
+            - order
+        environment:
+            - MICROCOFFEE_WEB_HOST=192.168.99.100
+            - MICROCOFFEE_WEB_PORT_LOCATION_HTTP=8081
+            - MICROCOFFEE_WEB_PORT_LOCATION_HTTPS=8444
+            - MICROCOFFEE_WEB_PORT_ORDER_HTTP=8082
+            - MICROCOFFEE_WEB_PORT_ORDER_HTTPS=8445
+    location:
+        image: microcoffeeonkube-location:1.0.0-SNAPSHOT
+        ports:
+            - "8081:8081"
+            - "8444:8444"
+        links:
+            - mongodb
+        environment:
+            - MICROCOFFEE_MONGODB_SERVICE_HOST=192.168.99.100
+            - MICROCOFFEE_MONGODB_SERVICE_PORT=27017
+    order:
+        image: microcoffeeonkube-order:1.0.0-SNAPSHOT
+        ports:
+            - "8082:8082"
+            - "8445:8445"
+        links:
+            - mongodb
+        environment:
+            - MICROCOFFEE_MONGODB_SERVICE_HOST=192.168.99.100
+            - MICROCOFFEE_MONGODB_SERVICE_PORT=27017
+            - MICROCOFFEE_CREDITRATING_SERVICE_HOST=192.168.99.100
+            - MICROCOFFEE_CREDITRATING_SERVICE_PORT_CREDIT_HTTP=8083
+            - MICROCOFFEE_CREDITRATING_SERVICE_PORT_CREDIT_HTTPS=8446
+    creditrating:
+        image: microcoffeeonkube-creditrating:1.0.0-SNAPSHOT
+        ports:
+            - "8083:8083"
+            - "8446:8446"
+    mongodb:
+        image: mongo:3.4.8
+        ports:
+            - "27017:27017"
+            - "28017:28017"
+        volumes:
+            - mongodbdata:/data/db
+volumes:
+    mongodbdata:
+        external: true

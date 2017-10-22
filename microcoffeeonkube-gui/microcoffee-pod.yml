@@ -49,6 +49,13 @@ spec:
           value: "192.168.99.100"
         - name: MICROCOFFEE_MONGODB_SERVICE_PORT
           value: "27017"
+    - name: creditrating
+      image: microcoffeeonkube-creditrating:1.0.0-SNAPSHOT
+      ports:
+        - containerPort: 8083
+          hostPort: 8083
+        - containerPort: 8446
+          hostPort: 8446
     - name: mongodb
       image: mongo:3.4.8
       ports:

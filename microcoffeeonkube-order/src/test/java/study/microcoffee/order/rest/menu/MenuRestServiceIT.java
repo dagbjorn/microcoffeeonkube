@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest;
+package study.microcoffee.order.rest.menu;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,8 +23,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.mongodb.MongoClient;
 
 import study.microcoffee.order.repository.MongoMenuRepository;
-import study.microcoffee.order.rest.MenuRestService;
 
+/**
+ * Integration tests of {@link MenuRestService}.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
@@ -46,7 +48,7 @@ public class MenuRestServiceIT {
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
     }
 
-    @SpringBootApplication
+    @SpringBootApplication(scanBasePackages = "study.microcoffee.order.consumer")
     @Import({ MenuRestService.class, MongoMenuRepository.class })
     @EnableMongoRepositories(basePackages = "study.microcoffee.order.repository")
     static class Config {

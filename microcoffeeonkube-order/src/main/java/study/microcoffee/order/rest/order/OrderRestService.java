@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest;
+package study.microcoffee.order.rest.order;
 
 import java.net.URI;
 
@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import study.microcoffee.order.consumer.creditrating.CreditRatingConsumer;
 import study.microcoffee.order.domain.Order;
 import study.microcoffee.order.exception.OrderNotFoundException;
 import study.microcoffee.order.repository.OrderRepository;
@@ -31,10 +33,15 @@ import study.microcoffee.order.repository.OrderRepository;
 @RequestMapping(path = "/coffeeshop", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class OrderRestService {
 
+    private static final int MINIMUM_CREDIT_RATING = 50;
+
     private Logger logger = LoggerFactory.getLogger(OrderRestService.class);
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private CreditRatingConsumer creditRatingConsumer;
 
     /**
      * Saves the order in the database.
@@ -50,7 +57,13 @@ public class OrderRestService {
      */
     @PostMapping(path = "/{coffeeShopId}/order", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<Order> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId, @RequestBody Order order) {
-        logger.debug("REST service called: POST /{}/order body={}", coffeeShopId, order);
+        logger.debug("POST /{}/order body={}", coffeeShopId, order);
+
+        // TODO customerId should be read from database given name in order.
+        int creditRating = creditRatingConsumer.getCreateRating("123");
+        if (creditRating < MINIMUM_CREDIT_RATING) {
+            return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).build();
+        }
 
         order.setCoffeeShopId(coffeeShopId);
 
@@ -77,7 +90,7 @@ public class OrderRestService {
      */
     @GetMapping(path = "/{coffeeShopId}/order/{orderId}")
     public Order getOrder(@PathVariable("coffeeShopId") long coffeeShopId, @PathVariable("orderId") String orderId) {
-        logger.debug("REST service called: GET /{}/order/{}", coffeeShopId, orderId);
+        logger.debug("GET /{}/order/{}", coffeeShopId, orderId);
 
         Order order = orderRepository.findById(orderId);
         if (order == null) {

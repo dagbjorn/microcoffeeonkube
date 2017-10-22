@@ -1,4 +1,4 @@
-package study.microcoffee.order.rest;
+package study.microcoffee.order.rest.menu;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class MenuRestService {
      */
     @GetMapping(path = "/menu")
     public Object getCoffeeMenu() {
-        logger.debug("REST service called: /menu");
+        logger.debug("GET /menu");
 
         return menuRepository.getCoffeeMenu();
     }

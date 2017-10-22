@@ -17,9 +17,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mongodb.MongoClient;
 
-import study.microcoffee.order.repository.MenuRepository;
-import study.microcoffee.order.repository.MongoMenuRepository;
-
+/**
+ * Integration tests of {@link MongoMenuRepository}.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("/application-test.properties")

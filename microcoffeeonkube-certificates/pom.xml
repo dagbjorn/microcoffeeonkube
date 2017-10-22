@@ -39,6 +39,9 @@
                         <configuration>
                             <alias>localhost</alias>
                             <dname>cn=localhost, ou=Unknown, o=Unknown, l=Unknown, st=Unknown, c=Unknown</dname>
+                            <!--
+                            <ext>SAN=ip:127.0.0.1,dns:localhost</ext>
+                            -->
                         </configuration>
                     </execution>
                     <execution>

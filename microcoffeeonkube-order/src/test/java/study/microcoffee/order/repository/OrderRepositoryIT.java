@@ -20,8 +20,10 @@ import com.mongodb.MongoClient;
 
 import study.microcoffee.order.domain.DrinkType;
 import study.microcoffee.order.domain.Order;
-import study.microcoffee.order.repository.OrderRepository;
 
+/**
+ * Integration tests of {@link OrderRepository}.
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
