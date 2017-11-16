@@ -5,6 +5,7 @@ import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,6 +42,8 @@ public class OrderRestService {
     private OrderRepository orderRepository;
 
     @Autowired
+    //@Qualifier("Basic")
+    @Qualifier("Hystrix")
     private CreditRatingConsumer creditRatingConsumer;
 
     /**
@@ -59,8 +62,7 @@ public class OrderRestService {
     public ResponseEntity<Order> saveOrder(@PathVariable("coffeeShopId") long coffeeShopId, @RequestBody Order order) {
         logger.debug("POST /{}/order body={}", coffeeShopId, order);
 
-        // TODO customerId should be read from database given name in order.
-        int creditRating = creditRatingConsumer.getCreateRating("123");
+        int creditRating = creditRatingConsumer.getCreditRating(order.getDrinker());
         if (creditRating < MINIMUM_CREDIT_RATING) {
             return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).build();
         }

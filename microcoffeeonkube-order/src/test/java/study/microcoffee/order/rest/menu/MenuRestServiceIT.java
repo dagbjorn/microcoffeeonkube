@@ -29,7 +29,7 @@ import study.microcoffee.order.repository.MongoMenuRepository;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource("/application-test.properties")
+@TestPropertySource(locations = { "/application-test.properties" }, properties = { "server.ssl.enabled=false" })
 public class MenuRestServiceIT {
 
     private static final String SERVICE_PATH = "/coffeeshop/menu";
@@ -48,7 +48,7 @@ public class MenuRestServiceIT {
         assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON_UTF8);
     }
 
-    @SpringBootApplication(scanBasePackages = "study.microcoffee.order.consumer")
+    @SpringBootApplication
     @Import({ MenuRestService.class, MongoMenuRepository.class })
     @EnableMongoRepositories(basePackages = "study.microcoffee.order.repository")
     static class Config {

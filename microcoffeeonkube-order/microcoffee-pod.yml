@@ -26,6 +26,11 @@ spec:
           hostPort: 8083
         - containerPort: 8446
           hostPort: 8446
+      env:
+        - name: CREDITRATING_SERVICE_BEHAVIOR
+          value: "0"
+        - name: CREDITRATING_SERVICE_BEHAVIOR_FIXEDDELAY
+          value: "10"
     - name: mongodb
       image: mongo:3.4.8
       ports:

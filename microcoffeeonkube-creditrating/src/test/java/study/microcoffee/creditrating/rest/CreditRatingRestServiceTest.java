@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import study.microcoffee.creditrating.behavior.ServiceBehavior;
 import study.microcoffee.creditrating.domain.CreditRating;
 
 /**
@@ -28,6 +30,9 @@ import study.microcoffee.creditrating.domain.CreditRating;
 public class CreditRatingRestServiceTest {
 
     private static final String SERVICE_PATH = "/coffeeshop/creditrating/{customerId}";
+
+    @MockBean
+    private ServiceBehavior serviceBehavior;
 
     @Autowired
     private MockMvc mockMvc;

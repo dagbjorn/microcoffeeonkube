@@ -273,9 +273,9 @@ assuming the VM host IP 192.168.99.100 and that https is in use.
 :warning: Because of the self-signed certificate, a security-aware browser will complain a bit.
 * Chrome: Just click Advanced and hit the "Proceed to 192.168.99.100 (unsafe)" link.
 * Opera: Just click Continue anyway.
-* Firefox: Takes a bit more effort. Click Advanced, then Add Exception and finally Confirm Security Exception. Make sure that "Permanently store this exception" is checked. Next, manually add exceptions for the REST service URLs.
-  - Select Tools > Options > Advanced > Certificates > View Certificates to open Certificate Manager.
-  - In turn, add **Server** exceptions for the following locations: `https://192.168.99.100:8444` and `https://192.168.99.100:8445`
+* Firefox 56.0: Takes a bit more effort. Click Advanced, then Add Exception and finally Confirm Security Exception. Make sure that "Permanently store this exception" is checked. Next, manually add exceptions for the REST service URLs.
+  - Select Tools > Options > Privacy & Security > Certificates > View Certificates to open Certificate Manager.
+  - On Servers tab, in turn, add exceptions for the following locations: `https://192.168.99.100:8444` and `https://192.168.99.100:8445`
   - Click Get Certificate
   - Click Confirm Security Exception (make sure that "Permanently store this exception" is checked).
 

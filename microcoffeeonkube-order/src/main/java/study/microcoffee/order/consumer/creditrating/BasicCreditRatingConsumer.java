@@ -2,6 +2,7 @@ package study.microcoffee.order.consumer.creditrating;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,24 +13,25 @@ import org.springframework.web.client.RestTemplate;
 import study.microcoffee.order.exception.ServiceCallFailedException;
 
 /**
- * REST-based implementation of a CreditRatingConsumer.
+ * Basic implementation of REST-based CreditRatingConsumer.
  */
 @Component
-public class CreditRatingCustomerImpl implements CreditRatingConsumer {
+@Qualifier("Basic")
+public class BasicCreditRatingConsumer implements CreditRatingConsumer {
 
-    private static final String GET_CREATE_RATING_RESOURCE = "/coffeeshop/creditrating/{customerId}";
+    private static final String GET_CREDIT_RATING_RESOURCE = "/coffeeshop/creditrating/{customerId}";
 
-    private final Logger logger = LoggerFactory.getLogger(CreditRatingCustomerImpl.class);
+    private final Logger logger = LoggerFactory.getLogger(BasicCreditRatingConsumer.class);
 
     @Value("#{creditRatingRestTemplateFactory.createRestTemplate()}")
     private RestTemplate restTemplate;
 
     @Value("${creditrating.endpointurl}")
-    private String createRatingEndpointUrl;
+    private String creditRatingEndpointUrl;
 
     @Override
-    public int getCreateRating(String customerId) {
-        String url = createRatingEndpointUrl + GET_CREATE_RATING_RESOURCE;
+    public int getCreditRating(String customerId) {
+        String url = creditRatingEndpointUrl + GET_CREDIT_RATING_RESOURCE;
 
         logger.debug("GET request to {}, customerId={}", url, customerId);
 

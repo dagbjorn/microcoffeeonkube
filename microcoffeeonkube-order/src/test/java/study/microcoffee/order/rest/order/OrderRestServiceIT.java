@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -106,6 +107,7 @@ public class OrderRestServiceIT {
     @Import({ OrderRestService.class })
     @ComponentScan(basePackages = { "study.microcoffee.order.security", "study.microcoffee.order.consumer.creditrating" })
     @EnableMongoRepositories(basePackages = "study.microcoffee.order.repository")
+    @EnableCircuitBreaker
     static class Config {
 
         @Value("${mongo.database.host}")

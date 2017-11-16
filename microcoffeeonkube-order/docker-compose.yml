@@ -18,6 +18,9 @@ services:
         ports:
             - "8083:8083"
             - "8446:8446"
+        environment:
+            - CREDITRATING_SERVICE_BEHAVIOR=0
+            - CREDITRATING_SERVICE_BEHAVIOR_FIXEDDELAY=10
     mongodb:
         image: mongo:3.4.8
         ports:

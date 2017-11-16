@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import study.microcoffee.creditrating.behavior.ServiceBehavior;
 import study.microcoffee.creditrating.domain.CreditRating;
 
 /**
@@ -21,9 +22,17 @@ public class CreditRatingRestService {
 
     private Logger logger = LoggerFactory.getLogger(CreditRatingRestService.class);
 
+    public ServiceBehavior serviceBehavior;
+
+    public CreditRatingRestService(ServiceBehavior serviceBehavior) {
+        this.serviceBehavior = serviceBehavior;
+    }
+
     @GetMapping(path = "/creditrating/{customerId}")
     public CreditRating getCreditRating(@PathVariable("customerId") String customerId) {
         logger.debug("GET /creditrating/{}", customerId);
+
+        serviceBehavior.execute();
 
         // TODO Create some kind of database table where customers credit rating is found.
         CreditRating creditRating = new CreditRating(70);

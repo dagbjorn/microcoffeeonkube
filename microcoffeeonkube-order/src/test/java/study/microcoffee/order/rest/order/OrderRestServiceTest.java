@@ -14,6 +14,7 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +51,7 @@ public class OrderRestServiceTest {
     private OrderRepository orderRepositoryMock;
 
     @MockBean
+    @Qualifier("Hystrix")
     private CreditRatingConsumer creditRatingCustomerMock;
 
     @Autowired
@@ -75,7 +77,7 @@ public class OrderRestServiceTest {
             .build();
 
         given(orderRepositoryMock.save(any(Order.class))).willReturn(savedOrder);
-        given(creditRatingCustomerMock.getCreateRating(anyString())).willReturn(70);
+        given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(70);
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
             .header(HttpHeaders.ORIGIN, accessControlAllowOrigin) //
@@ -98,7 +100,7 @@ public class OrderRestServiceTest {
             .selectedOption("skimmed milk") //
             .build();
 
-        given(creditRatingCustomerMock.getCreateRating(anyString())).willReturn(20);
+        given(creditRatingCustomerMock.getCreditRating(anyString())).willReturn(20);
 
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
             .content(toJson(newOrder)) //

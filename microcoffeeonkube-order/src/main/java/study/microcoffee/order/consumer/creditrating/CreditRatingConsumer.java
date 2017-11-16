@@ -12,5 +12,5 @@ public interface CreditRatingConsumer {
      *            the customer ID.
      * @return The credit rating between 0 and 100.
      */
-    int getCreateRating(String customerId);
+    int getCreditRating(String customerId);
 }
