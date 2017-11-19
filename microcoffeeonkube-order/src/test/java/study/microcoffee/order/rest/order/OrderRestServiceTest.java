@@ -105,7 +105,8 @@ public class OrderRestServiceTest {
         mockMvc.perform(post(POST_SERVICE_PATH, COFFEE_SHOP_ID) //
             .content(toJson(newOrder)) //
             .contentType(MediaType.APPLICATION_JSON_UTF8)) //
-            .andExpect(status().isPaymentRequired());
+            .andExpect(status().isPaymentRequired()) //
+            .andExpect(content().contentType(MediaType.TEXT_PLAIN));
     }
 
     @Test

@@ -15,8 +15,9 @@ spec:
         - containerPort: 8446
           hostPort: 8446
       env:
+        # See application.properties for supported behaviors
         - name: CREDITRATING_SERVICE_BEHAVIOR
           value: "0"
-        - name: CREDITRATING_SERVICE_BEHAVIOR_FIXEDDELAY
+        - name: CREDITRATING_SERVICE_BEHAVIOR_DELAY
           value: "10"
           

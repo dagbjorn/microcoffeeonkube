@@ -6,7 +6,7 @@ Date | Change
 ---- | -------
 20.06.2017 | Created.
 12.09.2017 | Migrated to official MongoDB image.
-22.10.2017 | TODO Markdown file. New stuff checked in: New creditrating microservice (project: microcoffeeonkube-creditrating) for checking if customers are creditworthy. Used by the order microservice before an order is accepted. Added support for docker-compose due to flaky Minikube causing loads of connection refused.
+22.10.2017 | TODO Markdown file. New stuff checked in: New CreditRating microservice (project: microcoffeeonkube-creditrating) for checking if customers are creditworthy. Used by the Order microservice before an order is accepted. Added support for docker-compose due to flaky Minikube causing loads of connection refused + some occasional blue screens.
 
 ## Contents
 
@@ -28,7 +28,7 @@ The &micro;Coffee Shop application is based on the coffee shop application coded
 ## <a name="application"></a>The application
 
 ### The microservices
-The application is made up by four microservices, each running in its own Docker container. Each microservice, apart from the database, is implemented by a Spring Boot application. Finally, the application is deployed on Kubernetes where each microservice is allocated a replication controller fronted by a service. For development purposes, each microservice may also be run as a "naked" pod. Endpoint configuration is based on environment variables.
+The application is made up by five microservices, each running in its own Docker container. Each microservice, apart from the database, is implemented by a Spring Boot application. Finally, the application is deployed on Kubernetes where each microservice is allocated a replication controller fronted by a service. For development purposes, each microservice may also be run as a "naked" pod. Endpoint configuration is based on environment variables.
 
 The application supports both http and https on the frontend consisting of a GUI and REST services facing the Internet. However, https is a requirement in Chrome and Opera to get the HTML Geolocation API going. Also, browsers are not particulary happy with mixed content (mix of http and https connections), so pure use of https is recommended.
 
@@ -46,6 +46,13 @@ Contains the Location REST service for locating the nearest coffee shop. Coffee 
 
 #### microcoffeeonkube-order
 Contains the Menu and Order REST services. Provides APIs for reading the coffee menu and placing coffee orders.
+
+Order uses the CreditRating REST service as a backend service for checking if a customer is creditworthy when placing an order. CreditRating is an unreliable service, hence giving us an "excuse" to use Hystrix from Spring Cloud Netflix for supervising service calls.
+
+#### microcoffeeonkube-creditrating
+Contains an extremely simple credit rating service. Provides an API for checking if a customer is creditworthy. Used by the Order service.
+
+Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by environment variables. Current options include stable, failing, slow and random behaviors.
 
 #### microcoffeeonkube-gui
 Contains the application GUI written in AngularJS. Nothing fancy, but will load the coffee shop menu from which your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.

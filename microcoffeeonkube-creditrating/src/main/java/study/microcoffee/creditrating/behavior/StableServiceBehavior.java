@@ -1,9 +1,9 @@
 package study.microcoffee.creditrating.behavior;
 
 /**
- * Class that implements successful service behavior.
+ * Class that implements stable service behavior.
  */
-public class SuccessfulServiceBehavior extends AbstractServiceBehavior {
+public class StableServiceBehavior extends AbstractServiceBehavior {
 
     @Override
     public void execute() {

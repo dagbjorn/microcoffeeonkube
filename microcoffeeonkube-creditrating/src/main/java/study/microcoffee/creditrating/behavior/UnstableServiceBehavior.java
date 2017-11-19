@@ -8,17 +8,17 @@ import org.slf4j.LoggerFactory;
 import study.microcoffee.creditrating.exception.ServiceBehaviorException;
 
 /**
- * Class that implements random service behavior.
+ * Class that implements unstable service behavior determined by a random value.
  */
-public class RandomServiceBehavior extends AbstractServiceBehavior {
+public class UnstableServiceBehavior extends AbstractServiceBehavior {
 
-    private final Logger logger = LoggerFactory.getLogger(RandomServiceBehavior.class);
+    private final Logger logger = LoggerFactory.getLogger(UnstableServiceBehavior.class);
 
     private Random random = new Random();
 
     private int delaySecs;
 
-    public RandomServiceBehavior(int delaySecs) {
+    public UnstableServiceBehavior(int delaySecs) {
         this.delaySecs = delaySecs;
     }
 
@@ -31,7 +31,7 @@ public class RandomServiceBehavior extends AbstractServiceBehavior {
             case 1:
             case 2:
                 sleep(DEFAULT_EXECUTION_TIME_MS);
-                logger.debug("Random behavior => success...");
+                logger.debug("Unstable behavior => success...");
                 break;
 
             case 3:
@@ -39,14 +39,14 @@ public class RandomServiceBehavior extends AbstractServiceBehavior {
             case 5:
             case 6:
                 sleep(DEFAULT_EXECUTION_TIME_MS);
-                logger.debug("Random behavior => failed...");
+                logger.debug("Unstable behavior => failed...");
 
                 throw new ServiceBehaviorException("Backend service failed");
 
             case 7:
             case 8:
             case 9:
-                logger.debug("Random behavior => slow exection...");
+                logger.debug("Unstable behavior => slow...");
                 sleep(delaySecs * 1000);
                 break;
         }

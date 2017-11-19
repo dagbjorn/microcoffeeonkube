@@ -14,6 +14,8 @@ import study.microcoffee.creditrating.domain.CreditRating;
 /**
  * Class implementing the Credit Rating REST service for checking if customers are creditworthy.
  * <p>
+ * Also, some kind of configurable service behavior is executed to give the illusion of an unreliable backend service.
+ * <p>
  * <b>TODO:</b> Currently a hardcoded credit rating of 70 is always returned. Needs to make it dependent on the actual customer.
  */
 @RestController
@@ -32,6 +34,7 @@ public class CreditRatingRestService {
     public CreditRating getCreditRating(@PathVariable("customerId") String customerId) {
         logger.debug("GET /creditrating/{}", customerId);
 
+        // Execute some kind of service behavior.
         serviceBehavior.execute();
 
         // TODO Create some kind of database table where customers credit rating is found.

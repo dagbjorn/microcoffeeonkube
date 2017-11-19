@@ -19,8 +19,9 @@ services:
             - "8083:8083"
             - "8446:8446"
         environment:
+            # See creditrating/application.properties for supported behaviors
             - CREDITRATING_SERVICE_BEHAVIOR=0
-            - CREDITRATING_SERVICE_BEHAVIOR_FIXEDDELAY=10
+            - CREDITRATING_SERVICE_BEHAVIOR_DELAY=10
     mongodb:
         image: mongo:3.4.8
         ports:

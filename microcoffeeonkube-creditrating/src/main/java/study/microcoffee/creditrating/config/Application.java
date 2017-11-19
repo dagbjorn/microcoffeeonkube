@@ -10,10 +10,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import study.microcoffee.creditrating.behavior.FailingServiceBehavior;
-import study.microcoffee.creditrating.behavior.FixedDelayServiceBehavior;
-import study.microcoffee.creditrating.behavior.RandomServiceBehavior;
 import study.microcoffee.creditrating.behavior.ServiceBehavior;
-import study.microcoffee.creditrating.behavior.SuccessfulServiceBehavior;
+import study.microcoffee.creditrating.behavior.SlowServiceBehavior;
+import study.microcoffee.creditrating.behavior.StableServiceBehavior;
+import study.microcoffee.creditrating.behavior.UnstableServiceBehavior;
 
 /**
  * The Spring Boot application of the microservice.
@@ -32,25 +32,25 @@ public class Application {
     @Bean
     @Autowired
     public ServiceBehavior serviceBehavior(@Value("${creditrating.service.behavior}") int serviceBehavior,
-        @Value("${creditrating.service.behavior.fixeddelay}") int fixedDelay) {
+        @Value("${creditrating.service.behavior.delay}") int delay) {
 
-        logger.debug("CreditRating service behavior={}, fixedDelay={}", serviceBehavior, fixedDelay);
+        logger.debug("CreditRating service behavior={}, delay={}", serviceBehavior, delay);
 
         switch (serviceBehavior) {
             case 0:
-                return new SuccessfulServiceBehavior();
+                return new StableServiceBehavior();
 
             case 1:
                 return new FailingServiceBehavior();
 
             case 2:
-                return new FixedDelayServiceBehavior(fixedDelay);
+                return new SlowServiceBehavior(delay);
 
             case 3:
-                return new RandomServiceBehavior(fixedDelay);
+                return new UnstableServiceBehavior(delay);
 
             default:
-                return new SuccessfulServiceBehavior();
+                return new StableServiceBehavior();
         }
     }
 }

@@ -61,7 +61,7 @@ public class HystrixCreditRatingConsumer implements CreditRatingConsumer {
      * @return The minimum credit rating.
      */
     public int getMinimumCreditRating(String customerId) {
-        logger.debug("Fallback method getMinimumCreditRating called");
+        logger.debug("Fallback method getMinimumCreditRating called => credit rating 0");
 
         return 0;
     }

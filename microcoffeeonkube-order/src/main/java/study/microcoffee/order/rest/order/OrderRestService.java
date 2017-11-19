@@ -42,7 +42,7 @@ public class OrderRestService {
     private OrderRepository orderRepository;
 
     @Autowired
-    //@Qualifier("Basic")
+    // @Qualifier("Basic")
     @Qualifier("Hystrix")
     private CreditRatingConsumer creditRatingConsumer;
 
@@ -64,7 +64,9 @@ public class OrderRestService {
 
         int creditRating = creditRatingConsumer.getCreditRating(order.getDrinker());
         if (creditRating < MINIMUM_CREDIT_RATING) {
-            return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).build();
+            return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED) //
+                .contentType(MediaType.TEXT_PLAIN) // To avoid "XML Parsing Error: no element found" in Firefox.
+                .build();
         }
 
         order.setCoffeeShopId(coffeeShopId);

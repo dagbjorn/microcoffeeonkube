@@ -92,6 +92,14 @@
                 var orderUrl = responseHeaders('Location');
                 $scope.messages.push({type: 'success', msg: 'Order sent!', orderId: order.id, coffeeShopId: order.coffeeShopId,
                         orderUrl: orderUrl});
+            }, function (response) {
+                $log.debug('Failed to order coffee: ', response);
+
+                if (response.status === 402) {
+                    alert('Sorry, too low credit rating to order!');
+                } else {
+                    alert(response.status + ' ' + response.statusText);
+                }
             });
         };
 
