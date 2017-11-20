@@ -6,7 +6,7 @@ Date | Change
 ---- | -------
 20.06.2017 | Created.
 12.09.2017 | Migrated to official MongoDB image.
-22.10.2017 | TODO Markdown file. New stuff checked in: New CreditRating microservice (project: microcoffeeonkube-creditrating) for checking if customers are creditworthy. Used by the Order microservice before an order is accepted. Added support for docker-compose due to flaky Minikube causing loads of connection refused + some occasional blue screens.
+22.10.2017 | New stuff checked in: New CreditRating microservice (project: microcoffeeonkube-creditrating) for checking if customers are creditworthy. Used by the Order microservice before an order is accepted. Added support for docker-compose due to flaky Minikube causing loads of connection refused + some occasional blue screens.
 
 ## Contents
 
@@ -52,7 +52,7 @@ Order uses the CreditRating REST service as a backend service for checking if a 
 #### microcoffeeonkube-creditrating
 Contains an extremely simple credit rating service. Provides an API for checking if a customer is creditworthy. Used by the Order service.
 
-Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by environment variables. Current options include stable, failing, slow and random behaviors.
+Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by environment variables. Current options include stable, failing, slow and unstable behaviors.
 
 #### microcoffeeonkube-gui
 Contains the application GUI written in AngularJS. Nothing fancy, but will load the coffee shop menu from which your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
@@ -71,15 +71,17 @@ Contains the Kubernetes manifest files (yaml) of the application, one manifest f
 Convenience batch files for easy deploy and undeploy of the application are also provided.
 
 ## <a name="prerequisite"></a>Prerequisite
-The microcoffee application is developed on Windows 10 and tested with Minikube 0.21.0 running on Oracle VM VirtualBox 5.1.26.
+The microcoffee application is developed on Windows 10 and tested with Minikube 0.21.0 running on Oracle VM VirtualBox 5.2.0.
 
 For building and testing the application on a development machine, Minikube is a good option. Minikube runs a single-node Kubernetes cluster inside a VM on your development machine. In addition, kubectl - the Kubernetes CLI - must be installed.
 
 Installation of Minikube and kubectl is straightforward, just download the two executables and place them in a folder on your Windows path. You may also want to define the two environment variables MINIKUBE\_HOME and KUBECONFIG to suitable folders if you don't like the default locations in your user home directory. MINIKUBE\_HOME is where the VM is downloaded first time you start Minikube. The size of this folder will grow over time. KUBECTL contains the kubectl config file.
 
-A separate Docker installation on your development machine is also useful, however strictly not necessary.
+A separate Docker installation on your development machine is also useful, however strictly not necessary if you are only going to run microcoffee on Minikube. Anyway, the codebase contains Docker Compose files for running microcoffee and this platform is found to be more stable than Minikube on Windows (at least on my machine). Latest versions tested are Docker 17.10.0-ce and Docker Compose 1.16.1.
 
-In addition, you need the basic Java development tools (IDE w/ Java 1.8 and Maven) installed on your development machine.
+:bulb: See documentation of [this GitHub project] (https://github.com/dagbjorn/microcoffee) for tip on how to run microcoffee on pure Docker.
+
+Finally, you need the basic Java development tools (IDE w/ Java 1.8 and Maven) installed on your development machine.
 
 ## <a name="start-minikube"></a>Start Minikube
 Before moving on and start building microcoffee, we need a running VM. The reason is that the Docker images being built are stored in the local Docker repository inside the VM.
@@ -133,7 +135,7 @@ Use Maven to build each microservice in turn. (The Spring Boot applications only
 
 :exclamation: Just remember that Minikube must be running for building the Docker images successfully.
 
-In `microcoffeeonkube-location`, `microcoffeeonkube-order` and `microcoffeeonkube-gui`, run:
+In `microcoffeeonkube-location`, `microcoffeeonkube-order`, `microcoffeeonkube-creditrating` and `microcoffeeonkube-gui`, run:
 
     mvn clean package docker:build
 
@@ -145,6 +147,7 @@ Project | Production | Integration testing
 microcoffeeonkube-gui | env.js | n/a
 microcoffeeonkube-location | application.properties | application-test.properties
 microcoffeeonkube-order | application.properties | application-test.properties
+microcoffeeonkube-creditrating | application.properties | application-test.properties
 
 Environment-specific properties comprise:
 * Database connection URL (for integration testing, separate properties are used).
@@ -160,6 +163,7 @@ Microservice | http port | https port | Comment
 microcoffeeonkube-gui | 9080 | 9443 | Port 8443 is allocated by Kubernetes itself.
 microcoffeeonkube-location | 8081 | 8444 |
 microcoffeeonkube-order | 8082 | 8445 |
+microcoffeeonkube-creditrating | 8083 | 8446 |
 microcoffeeonkube-database | 27017 | n/a |
 
 :warning: If you change any of the environment properties, you need to rebuild the actual Docker image.
@@ -175,6 +179,9 @@ microcoffeeonkube-gui | MICROCOFFEE\_WEB\_PORT\_ORDER\_HTTP | Manifest file
 microcoffeeonkube-gui | MICROCOFFEE\_WEB\_PORT\_ORDER\_HTTPS | Manifest file
 microcoffeeonkube-location | MICROCOFFEE\_MONGODB\_SERVICE\_HOST | Kubernetes service (out of the box)
 microcoffeeonkube-location | MICROCOFFEE\_MONGODB\_SERVICE\_PORT | Kubernetes service (out of the box)
+microcoffeeonkube-order | MICROCOFFEE\_CREDITRATING\_SERVICE\_HOST | Kubernetes service (out of the box)
+microcoffeeonkube-order | MICROCOFFEE\_CREDITRATING\_SERVICE\_PORT\_CREDIT\_HTTP | Kubernetes service (out of the box)
+microcoffeeonkube-order | MICROCOFFEE\_CREDITRATING\_SERVICE\_PORT\_CREDIT\_HTTPS | Kubernetes service (out of the box)
 microcoffeeonkube-order | MICROCOFFEE\_MONGODB\_SERVICE\_HOST | Kubernetes service (out of the box)
 microcoffeeonkube-order | MICROCOFFEE\_MONGODB\_SERVICE\_PORT | Kubernetes service (out of the box)
 
@@ -295,7 +302,7 @@ assuming the VM host IP 192.168.99.100 and that https is in use.
 * [Location API](#location-api)
 * [Menu API](#menu-api)
 * [Order API](#order-api)
-
+* [CreditRating API](#creditrating-api)
 
 ### <a name="location-api"></a>Location API
 
@@ -460,6 +467,7 @@ The returned Location header contains the URL of the created order.
 HTTP status | Description
 ----------- | -----------
 201 | New order created.
+402 | Too low credit rating to accept order. Payment required!
 
 **Example**
 
@@ -513,7 +521,7 @@ Read the details of the order of the given ID *orderId* from coffee shop with th
 
 HTTP status | Description
 ----------- | -----------
-200 | Order found and return in the JSON-formatted HTTP response body.
+200 | Order found and returned in the JSON-formatted HTTP response body.
 204 | Requested order ID is not found.
 
 **Example**
@@ -540,6 +548,67 @@ Response:
 
     curl -i http://192.168.99.100:8082/coffeeshop/1/order/585fe5230d248f00011173ce
     curl -i --insecure https://192.168.99.100:8445/coffeeshop/1/order/585fe5230d248f00011173ce
+
+### <a name="creditrating-api"></a>CreditRating API
+
+#### Get credit rating
+
+**Syntax**
+
+    GET /coffeeshop/creditrating/{customerId}
+
+Gets the credit rating of the customer with ID *customerId*.
+
+**Response**
+
+HTTP status | Description
+----------- | -----------
+200 | Credit rating returned in the JSON-formatted HTTP response body.
+
+**Example**
+
+    http://192.168.99.100:8083/coffeeshop/creditrating/john
+
+Response:
+
+    {
+        "creditRating": 70
+    }
+
+**Testing with curl**
+
+    curl -i http://192.168.99.100:8083/coffeeshop/creditrating/john
+    curl -i --insecure https://192.168.99.100:8446/coffeeshop/creditrating/john
+
+## <a name="spring-cloud"></a>Spring Cloud Netflix
+
+### <a name="hystrix"></a>Hystrix
+
+The Order service is using [Hystrix](https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_circuit_breaker_hystrix_clients) to supervise the unreliable CreditRating service. Hystrix by Netflix is an implementation of the circuit breaker pattern.
+
+The desired behavior of CreditRating is configurable by means of environment variables as follows:
+
+Environment variable | Description
+-------------------- | -----------
+CREDITRATING\_SERVICE\_BEHAVIOR | Values: 0=Stable, 1=Failing, 2=Slow, 3=Unstable. Default is 0.
+CREDITRATING\_SERVICE\_BEHAVIOR\_DELAY | Delay in seconds when behaviors 2 and 3 are used. Default is 10 secs.
+
+The service behaviors are described as follows:
+
+Behavior | Description
+-------- | -----------
+Stable | All service calls returns after a brief delay.
+Failing | All service calls throws an exception after a brief delay.
+Slow | All service calls is delayed by CREDITRATING\_SERVICE\_BEHAVIOR\_DELAY secs.
+Unstable | A random mix of stable, failing and slow behaviors.
+
+As a client of CreditRating, Order is the microservice that is using Hystrix.
+
+#### <a name="hystrix-dashboard"></a>Hystrix Dashboard
+
+:construction: More to come
+
+https://192.168.99.100:8445/hystrix
 
 ## <a name="other-stuff"></a>Other stuff
 
