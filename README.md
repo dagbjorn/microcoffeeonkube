@@ -6,7 +6,8 @@ Date | Change
 ---- | -------
 20.06.2017 | Created.
 12.09.2017 | Migrated to official MongoDB image.
-22.10.2017 | New stuff checked in: New CreditRating microservice (project: microcoffeeonkube-creditrating) for checking if customers are creditworthy. Used by the Order microservice before an order is accepted. Added support for docker-compose due to flaky Minikube causing loads of connection refused + some occasional blue screens.
+22.10.2017 | New CreditRating microservice for checking if customers are creditworthy. Added support for docker-compose due to flaky Minikube causing loads of connection refused + some occasional blue screens.
+21.11.2017 | Introduced Hystrix of Spring Cloud Netflix.
 
 ## Contents
 
@@ -20,7 +21,8 @@ Date | Change
 * [Setting up the database](#setting-up-database)
 * [Give microcoffee a spin](#give-a-spin)
 * [REST services](#rest-services)
-* [Other stuff](#other-stuff)
+* [Spring Cloud Netflix](#spring-cloud-netflix)
+* [Extras](#extras)
 
 ## <a name="acknowledgements"></a>Acknowledgements
 The &micro;Coffee Shop application is based on the coffee shop application coded live by Trisha Gee during her fabulous talk, "HTML5, Angular.js, Groovy, Java, MongoDB all together - what could possibly go wrong?", given at QCon London 2014. A few differences should be noted however; microcoffee uses a microservice architecture, runs in Docker containers on Kubernetes - the open source platform for management of containerized applications - and is developed in Spring Boot instead of Dropwizard as in Trisha's version.
@@ -77,9 +79,7 @@ For building and testing the application on a development machine, Minikube is a
 
 Installation of Minikube and kubectl is straightforward, just download the two executables and place them in a folder on your Windows path. You may also want to define the two environment variables MINIKUBE\_HOME and KUBECONFIG to suitable folders if you don't like the default locations in your user home directory. MINIKUBE\_HOME is where the VM is downloaded first time you start Minikube. The size of this folder will grow over time. KUBECTL contains the kubectl config file.
 
-A separate Docker installation on your development machine is also useful, however strictly not necessary if you are only going to run microcoffee on Minikube. Anyway, the codebase contains Docker Compose files for running microcoffee and this platform is found to be more stable than Minikube on Windows (at least on my machine). Latest versions tested are Docker 17.10.0-ce and Docker Compose 1.16.1.
-
-:bulb: See documentation of [this GitHub project] (https://github.com/dagbjorn/microcoffee) for tip on how to run microcoffee on pure Docker.
+A separate Docker installation on your development machine is also useful, however strictly not necessary if you are only going to run microcoffee on Minikube. Anyway, the codebase contains Docker Compose files for running microcoffee and this platform is found to be more stable than Minikube on Windows (at least on my machine). Latest versions tested are Docker 17.10.0-ce and Docker Compose 1.16.1. See [Using Plain Docker](#plain-docker) in the Extras section.
 
 Finally, you need the basic Java development tools (IDE w/ Java 1.8 and Maven) installed on your development machine.
 
@@ -287,7 +287,7 @@ assuming the VM host IP 192.168.99.100 and that https is in use.
 :warning: Because of the self-signed certificate, a security-aware browser will complain a bit.
 * Chrome: Just click Advanced and hit the "Proceed to 192.168.99.100 (unsafe)" link.
 * Opera: Just click Continue anyway.
-* Firefox 56.0: Takes a bit more effort. Click Advanced, then Add Exception and finally Confirm Security Exception. Make sure that "Permanently store this exception" is checked. Next, manually add exceptions for the REST service URLs.
+* Firefox: Takes a bit more effort. Click Advanced, then Add Exception and finally Confirm Security Exception. Make sure that "Permanently store this exception" is checked. Next, manually add exceptions for the REST service URLs.
   - Select Tools > Options > Privacy & Security > Certificates > View Certificates to open Certificate Manager.
   - On Servers tab, in turn, add exceptions for the following locations: `https://192.168.99.100:8444` and `https://192.168.99.100:8445`
   - Click Get Certificate
@@ -580,20 +580,22 @@ Response:
     curl -i http://192.168.99.100:8083/coffeeshop/creditrating/john
     curl -i --insecure https://192.168.99.100:8446/coffeeshop/creditrating/john
 
-## <a name="spring-cloud"></a>Spring Cloud Netflix
+## <a name="spring-cloud-netflix"></a>Spring Cloud Netflix
 
 ### <a name="hystrix"></a>Hystrix
 
-The Order service is using [Hystrix](https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_circuit_breaker_hystrix_clients) to supervise the unreliable CreditRating service. Hystrix by Netflix is an implementation of the circuit breaker pattern.
+Hystrix, an implementation of the [Circuit Breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html), is a latency and fault tolerance library provided by Spring Cloud Netflix. See the [Hystrix section](https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_circuit_breaker_hystrix_clients) of the Spring Cloud Netflix reference doc for how to integrate Hystrix in your application.
+
+The Order service is using [Hystrix](https://github.com/Netflix/Hystrix/wiki) to supervise calls to CreditRating, a service that can be configured to behave in an unreliable manner.
 
 The desired behavior of CreditRating is configurable by means of environment variables as follows:
 
 Environment variable | Description
 -------------------- | -----------
-CREDITRATING\_SERVICE\_BEHAVIOR | Values: 0=Stable, 1=Failing, 2=Slow, 3=Unstable. Default is 0.
-CREDITRATING\_SERVICE\_BEHAVIOR\_DELAY | Delay in seconds when behaviors 2 and 3 are used. Default is 10 secs.
+CREDITRATING\_SERVICE\_BEHAVIOR | 0=Stable, 1=Failing, 2=Slow, 3=Unstable. Default is 0.
+CREDITRATING\_SERVICE\_BEHAVIOR\_DELAY | Delay in seconds when behavior 2 or 3 are selected. Default is 10 secs.
 
-The service behaviors are described as follows:
+The service behaviors may be described as follows:
 
 Behavior | Description
 -------- | -----------
@@ -602,15 +604,76 @@ Failing | All service calls throws an exception after a brief delay.
 Slow | All service calls is delayed by CREDITRATING\_SERVICE\_BEHAVIOR\_DELAY secs.
 Unstable | A random mix of stable, failing and slow behaviors.
 
-As a client of CreditRating, Order is the microservice that is using Hystrix.
-
 #### <a name="hystrix-dashboard"></a>Hystrix Dashboard
 
-:construction: More to come
+The [Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) allows you to monitor Hystrix metrics in real time.
 
-https://192.168.99.100:8445/hystrix
+To start monitoring the Order service, navigate to:
 
-## <a name="other-stuff"></a>Other stuff
+    https://192.168.99.100:8445/hystrix
+
+Enter the following values:
+
+- Stream: https://192.168.99.100:8445/hystrix.stream
+- Delay: 2000 ms (default is fine)
+- Title: Order
+
+And click Monitor Stream.
+
+![Snapshot of Order Hystrix Dashboard](https://raw.githubusercontent.com/dagbjorn/microcoffeeonkube/master/microcoffeeonkube-docs/images/hystrix-dashboard-ok.png "Snapshot of Order Hystrix Dashboard")
+
+## <a name="extras"></a>Extras
+
+### <a name="plain-docker"></a>Using Plain Docker (as a stable alternative to Minikube)
+
+Minikube is somewhat flaky on Windows, hence running microcoffee on plain Docker may be a nice alternative. All microcoffee projects contains a `docker-compose.yml` that starts the current microservice as well as all downstreams microservices.
+
+For a complete guideline of how to run microcoffee on plain Docker, see the documentation of [this GitHub project] (https://github.com/dagbjorn/microcoffee).
+
+Briefly, perform the following steps (assuming VirtualBox default IP):
+
+1. Create a Docker VM for use with VirtualBox.
+
+    docker-machine create --driver virtualbox docker-vm
+
+2. Start docker-machine and set Docker env.
+
+    docker-machine start docker-vm
+    docker-setenv docker-vm
+
+`docker-setenv.bat` is a home-brewed utility to set the Docker env. A copy is found in `microcoffeeonkube-kubernetes\utils`.
+
+3. Build the Docker images of the microservices.
+
+From each microservice project:
+
+    mvn clean package docker:build
+
+4. Create the MongoDB database.
+
+    docker volume create --name mongodbdata
+
+5. Populate the database.
+
+From the database project:
+
+    docker-compose up -d
+
+    mvn gplus:execute -Ddbhost=192.168.99.100 -Ddbport=27017 -Ddbname=microcoffee -Dshopfile=oslo-coffee-shops.xml
+    mvn gplus:execute -Ddbhost=192.168.99.100 -Ddbport=27017 -Ddbname=microcoffee-test -Dshopfile=oslo-coffee-shops.xml
+
+    docker-compose down
+
+6. Start microcoffee.
+
+From the GUI project:
+
+    docker-compose up -d
+    docker-compose logs -f
+
+7. Give microcoffee a spin.
+
+    https://192.168.99.100:8443/coffee.html
 
 ### <a name="download-geodata"></a>Download geodata from OpenStreetMap
 
