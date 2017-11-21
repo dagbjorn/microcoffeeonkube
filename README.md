@@ -52,9 +52,9 @@ Contains the Menu and Order REST services. Provides APIs for reading the coffee 
 Order uses the CreditRating REST service as a backend service for checking if a customer is creditworthy when placing an order. CreditRating is an unreliable service, hence giving us an "excuse" to use Hystrix from Spring Cloud Netflix for supervising service calls.
 
 #### microcoffeeonkube-creditrating
-Contains an extremely simple credit rating service. Provides an API for checking if a customer is creditworthy. Used by the Order service.
+Contains an extremely simple credit rating service. Provides an API for reading the credit rating of a customer. Used by the Order service.
 
-Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by environment variables. Current options include stable, failing, slow and unstable behaviors.
+Mainly introduced to act as an unreliable backend service. The actual behavior may be configured by environment variables. Current options include stable, failing, slow and unstable behaviors. See the [Hystrix section](#hystrix) below for details.
 
 #### microcoffeeonkube-gui
 Contains the application GUI written in AngularJS. Nothing fancy, but will load the coffee shop menu from which your favorite coffee drink may be ordered. The user may also locate the nearest coffee shop and show it on Google Maps.
@@ -79,7 +79,7 @@ For building and testing the application on a development machine, Minikube is a
 
 Installation of Minikube and kubectl is straightforward, just download the two executables and place them in a folder on your Windows path. You may also want to define the two environment variables MINIKUBE\_HOME and KUBECONFIG to suitable folders if you don't like the default locations in your user home directory. MINIKUBE\_HOME is where the VM is downloaded first time you start Minikube. The size of this folder will grow over time. KUBECTL contains the kubectl config file.
 
-A separate Docker installation on your development machine is also useful, however strictly not necessary if you are only going to run microcoffee on Minikube. Anyway, the codebase contains Docker Compose files for running microcoffee and this platform is found to be more stable than Minikube on Windows (at least on my machine). Latest versions tested are Docker 17.10.0-ce and Docker Compose 1.16.1. See [Using Plain Docker](#plain-docker) in the Extras section.
+A separate Docker installation on your development machine is also useful, however strictly not necessary if you are only going to run microcoffee on Minikube. Anyway, the codebase contains Docker Compose files for running microcoffee on plain Docker. Better still, this platform is found to be more stable than Minikube on Windows. Latest versions tested are Docker 17.10.0-ce and Docker Compose 1.16.1. See [Using Plain Docker](#plain-docker) in the Extras section for a quick start guide.
 
 Finally, you need the basic Java development tools (IDE w/ Java 1.8 and Maven) installed on your development machine.
 
@@ -131,11 +131,11 @@ To specify, a different common name and/or key alias, run:
 :bulb: The keystore properties are specified in `application.properties` of each microservice using the `microcoffeeonkube-certificates` artifact.
 
 ### Build the microservices
-Use Maven to build each microservice in turn. (The Spring Boot applications only.)
+Use Maven to build each microservice in turn. (Spring Boot applications only.)
 
 :exclamation: Just remember that Minikube must be running for building the Docker images successfully.
 
-In `microcoffeeonkube-location`, `microcoffeeonkube-order`, `microcoffeeonkube-creditrating` and `microcoffeeonkube-gui`, run:
+In `microcoffeeonkube-creditrating`, `microcoffeeonkube-location`, `microcoffeeonkube-order` and `microcoffeeonkube-gui`, run:
 
     mvn clean package docker:build
 
@@ -160,7 +160,7 @@ The port numbers are:
 
 Microservice | http port | https port | Comment
 ------- | ---------- | ---------- | ---------
-microcoffeeonkube-gui | 9080 | 9443 | Port 8443 is allocated by Kubernetes itself.
+microcoffeeonkube-gui | 9080 | 9443 | Port 8443 is allocated by Kubernetes itself. On plain Docker, port 8080/8443 are used instead.
 microcoffeeonkube-location | 8081 | 8444 |
 microcoffeeonkube-order | 8082 | 8445 |
 microcoffeeonkube-creditrating | 8083 | 8446 |
@@ -185,7 +185,7 @@ microcoffeeonkube-order | MICROCOFFEE\_CREDITRATING\_SERVICE\_PORT\_CREDIT\_HTTP
 microcoffeeonkube-order | MICROCOFFEE\_MONGODB\_SERVICE\_HOST | Kubernetes service (out of the box)
 microcoffeeonkube-order | MICROCOFFEE\_MONGODB\_SERVICE\_PORT | Kubernetes service (out of the box)
 
-Note that `env.js` is filtered by a special servlet (`EnvironmentFilterServlet`) in the gui microservice, substituting the environment variables used by the REST endpoint URLs by actual values.
+Note that `env.js` is filtered by a special servlet (`EnvironmentFilterServlet`) in the gui microservice, substituting the environment variables used by the REST endpoint URLs with actual values.
 
 ## <a name="setting-up-database"></a>Setting up the database
 
@@ -293,7 +293,7 @@ assuming the VM host IP 192.168.99.100 and that https is in use.
   - Click Get Certificate
   - Click Confirm Security Exception (make sure that "Permanently store this exception" is checked).
 
-:no_entry: The application doesn't work in IE11. Error logged in console: "Object doesn't support property or method 'assign'." Object.assign is used in coffee.js. Needs some fixing... And Microsoft Edge? Cannot even find the site...
+:no_entry: The application doesn't work on IE11. Error logged in console: "Object doesn't support property or method 'assign'." Object.assign is used in coffee.js. Needs some fixing... And Microsoft Edge? Cannot even find the site...
 
 ## <a name="rest-services"></a>REST services
 
@@ -557,7 +557,7 @@ Response:
 
     GET /coffeeshop/creditrating/{customerId}
 
-Gets the credit rating of the customer with ID *customerId*.
+Gets the credit rating of the customer with ID *customerId*. For the time being, a credit rating of 70 is always returned!
 
 **Response**
 
@@ -584,16 +584,16 @@ Response:
 
 ### <a name="hystrix"></a>Hystrix
 
-Hystrix, an implementation of the [Circuit Breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html), is a latency and fault tolerance library provided by Spring Cloud Netflix. See the [Hystrix section](https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_circuit_breaker_hystrix_clients) of the Spring Cloud Netflix reference doc for how to integrate Hystrix in your application.
+[Hystrix](https://github.com/Netflix/Hystrix/wiki), an implementation of the [Circuit Breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html), is a latency and fault tolerance library provided by Spring Cloud Netflix. See the [Hystrix section](https://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#_circuit_breaker_hystrix_clients) of the Spring Cloud Netflix reference doc for how to integrate Hystrix in an application.
 
-The Order service is using [Hystrix](https://github.com/Netflix/Hystrix/wiki) to supervise calls to CreditRating, a service that can be configured to behave in an unreliable manner.
+The Order service is using Hystrix to supervise calls to CreditRating, a service that can be configured to behave in an unreliable manner.
 
-The desired behavior of CreditRating is configurable by means of environment variables as follows:
+The desired behavior of CreditRating is configurable by means of environment variables.
 
 Environment variable | Description
 -------------------- | -----------
 CREDITRATING\_SERVICE\_BEHAVIOR | 0=Stable, 1=Failing, 2=Slow, 3=Unstable. Default is 0.
-CREDITRATING\_SERVICE\_BEHAVIOR\_DELAY | Delay in seconds when behavior 2 or 3 are selected. Default is 10 secs.
+CREDITRATING\_SERVICE\_BEHAVIOR\_DELAY | Delay in seconds when behavior 2 or 3 is selected. Default is 10 secs.
 
 The service behaviors may be described as follows:
 
@@ -608,17 +608,13 @@ Unstable | A random mix of stable, failing and slow behaviors.
 
 The [Hystrix Dashboard](https://github.com/Netflix/Hystrix/wiki/Dashboard) allows you to monitor Hystrix metrics in real time.
 
-To start monitoring the Order service, navigate to:
-
-    https://192.168.99.100:8445/hystrix
-
-Enter the following values:
+To start monitoring the Order service, navigate to https://192.168.99.100:8445/hystrix and enter the following values:
 
 - Stream: https://192.168.99.100:8445/hystrix.stream
 - Delay: 2000 ms (default is fine)
 - Title: Order
 
-And click Monitor Stream.
+Then, click Monitor Stream. (A snippet of the dashboard is shown below.)
 
 ![Snapshot of Order Hystrix Dashboard](https://raw.githubusercontent.com/dagbjorn/microcoffeeonkube/master/microcoffeeonkube-docs/images/hystrix-dashboard-ok.png "Snapshot of Order Hystrix Dashboard")
 
@@ -628,32 +624,32 @@ And click Monitor Stream.
 
 Minikube is somewhat flaky on Windows, hence running microcoffee on plain Docker may be a nice alternative. All microcoffee projects contains a `docker-compose.yml` that starts the current microservice as well as all downstreams microservices.
 
-For a complete guideline of how to run microcoffee on plain Docker, see the documentation of [this GitHub project] (https://github.com/dagbjorn/microcoffee).
+For a complete guideline of how to run microcoffee on plain Docker, see the markdown of https://github.com/dagbjorn/microcoffee.
 
-Briefly, perform the following steps (assuming VirtualBox default IP):
+Briefly, perform the following steps (assuming VirtualBox default IP) to use plain Docker:
 
-1. Create a Docker VM for use with VirtualBox.
+1: Create a Docker VM for use with VirtualBox.
 
     docker-machine create --driver virtualbox docker-vm
 
-2. Start docker-machine and set Docker env.
+2: Start docker-machine and set Docker env.
 
     docker-machine start docker-vm
     docker-setenv docker-vm
 
-`docker-setenv.bat` is a home-brewed utility to set the Docker env. A copy is found in `microcoffeeonkube-kubernetes\utils`.
+`docker-setenv.bat` is a home-brewed utility to set the Docker env. The batch file is found in `microcoffeeonkube-kubernetes\utils`.
 
-3. Build the Docker images of the microservices.
+3: Build the Docker images of the microservices.
 
 From each microservice project:
 
     mvn clean package docker:build
 
-4. Create the MongoDB database.
+4: Create the MongoDB database.
 
     docker volume create --name mongodbdata
 
-5. Populate the database.
+5: Populate the database.
 
 From the database project:
 
@@ -664,14 +660,14 @@ From the database project:
 
     docker-compose down
 
-6. Start microcoffee.
+6: Start microcoffee.
 
 From the GUI project:
 
     docker-compose up -d
     docker-compose logs -f
 
-7. Give microcoffee a spin.
+7: Give microcoffee a spin.
 
     https://192.168.99.100:8443/coffee.html
 
